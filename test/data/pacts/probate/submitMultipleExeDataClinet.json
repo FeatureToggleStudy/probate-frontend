@@ -76,13 +76,10 @@
       "dod_formattedDate" : "2 February 2000"
     },
     "registry" : {
-      "name" : "Oxford",
-      "email" : "test.probate.inbox@gmail.com",
-      "address" : "Digital Application\nOxford District Probate Registry\nCombined Court Building\nSt Aldates\nOxford\nOX1 1LY",
-      "sequenceNumber" : 11322
+      "name" : "Oxford"
     },
     "applicant" : {
-      "email" : "maggy.penelope@sellcow.net",
+      "email" : "multipleexecutorformdata@gmail.com",
       "alias" : "diff SingleExeCaseDataFN",
       "address" : "8 Neville Road London E7 9QX",
       "lastName" : "ExeFN ",
@@ -227,7 +224,7 @@
       "hasEmailChanged" : false,
       "declarationCheckbox" : "true"
     },
-    "applicantEmail" : "maggy.penelope@sellcow.net",
+    "applicantEmail" : "multipleexecutorformdata@gmail.com",
     "documentupload" : { },
     "payloadVersion" : "4.1.1",
     "paymentPending" : "false",

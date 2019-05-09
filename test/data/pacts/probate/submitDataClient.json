@@ -1,12 +1,12 @@
 {
   "applicant": {
-    "email": "someemailaddress@host.com",
+    "email": "submitpartialformdata@gmail.com",
     "firstName": "Jon",
     "lastName": "Snow",
     "address": "Pret a Manger St. Georges Hospital Blackshaw Road London SW17 0QT",
     "postCode": "SW17 0QT",
     "phoneNumber": "123455678",
-    "addressFound": "Yes",
+    "addressFound": "true",
     "freeTextAddress": "Pret a Manger St. Georges Hospital Blackshaw Road",
     "relationshipToDeceased": "adoptedChild",
     "adoptionInEnglandOrWales": "Yes"
@@ -14,10 +14,10 @@
   "deceased": {
     "firstName": "Ned",
     "lastName": "Stark",
-    "dob_date": "1930-01-01",
-    "dod_date": "2018-01-01",
+    "dob_date": "1930-01-01T00:00:00.000Z",
+    "dod_date": "2018-01-01T00:00:00.000Z",
     "address": "Winterfell, Westeros",
-    "addressFound": "Yes",
+    "addressFound": "true",
     "postCode": "SW17 0QT",
     "freeTextAddress": "Winterfell, Westeros",
     "alias": "Yes",
@@ -53,12 +53,9 @@
     "overseas": 6
   },
   "registry": {
-    "name": "Birmingham",
-    "email": "birmingham@email.com",
-    "address": "Line 1 Bham\nLine 2 Bham\nLine 3 Bham\nPostCode Bham",
-    "sequenceNumber": 20075
+    "name": "Birmingham"
   },
   "declarationCheckbox": "Yes",
   "uploadDocumentUrl": "http://document-management/document/12345",
-  "applicantEmail": "someemailaddress@host.com"
+  "applicantEmail": "submitpartialformdata@gmail.com"
 }

@@ -83,13 +83,10 @@
       "dod_formattedDate" : "2 February 2000"
     },
     "registry" : {
-      "name" : "Manchester",
-      "email" : "test.probate.inbox@gmail.com",
-      "address" : "Digital Application\nManchester Civil Justice Centre\nGround Floor\n1 Bridge Street West\nP.O. BOX 4240\nManchester\nM60 9DJ",
-      "sequenceNumber" : 31026
+      "name" : "Manchester"
     },
     "applicant" : {
-      "email" : "ccdcasedata1@gmail.com",
+      "email" : "singleexecutorformdata@gmail.com",
       "alias" : "diff TestFN TestLN",
       "address" : "120 Caulfield Road London E6 2DG",
       "lastName" : "TestLN",
@@ -153,7 +150,7 @@
       "hasEmailChanged" : false,
       "declarationCheckbox" : "true"
     },
-    "applicantEmail" : "ccdcasedata1@gmail.com",
+    "applicantEmail" : "singleexecutorformdata@gmail.com",
     "documentupload" : { },
     "payloadVersion" : "4.1.1",
     "paymentPending" : "false",
