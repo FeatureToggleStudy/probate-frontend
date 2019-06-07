@@ -25,3 +25,5 @@ git.properties.json
 /mochawesome-report/
 
 test/end-to-end/_output/
+
+test/end-to-end/test/end-to-end/output/
