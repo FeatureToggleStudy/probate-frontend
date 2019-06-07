@@ -73,9 +73,10 @@ class PaymentBreakdown extends Step {
                 return [ctx, errors];
             }
 
-            const [canCreatePayment, paymentStatus] = yield this.canCreatePayment(ctx, formdata, serviceAuthResult);
+            let [canCreatePayment, paymentStatus] = yield this.canCreatePayment(ctx, formdata, serviceAuthResult);
             logger.info(`canCreatePayment result = ${canCreatePayment} with status ${paymentStatus}`);
-            if (paymentStatus === 'Initiated') {
+            if (ctx.reference && paymentStatus !== 'Success') {
+                logger.info('Checking existing payment to see if payment was successful.');
                 const paymentCreateServiceUrl = config.services.payment.url + config.services.payment.paths.createPayment;
                 const payment = new Payment(paymentCreateServiceUrl, ctx.sessionID);
                 const data = {
@@ -87,13 +88,18 @@ class PaymentBreakdown extends Step {
                 const getPaymentResponse = yield payment.get(data);
                 logger.info('Checking status of reference = ' + ctx.reference + ' with response = ' + getPaymentResponse.status);
                 if (getPaymentResponse.status === 'Initiated') {
-                    logger.error('As payment is still Initiated, user will need to wait for this state to expire.');
-                    errors.push(FieldError('payment', 'initiated', this.resourcePath, ctx));
-                    return [ctx, errors];
+                    logger.info('Existing payment still Initiated allowing user to create a new payment.');
+                    canCreatePayment = true;
+                } else if (getPaymentResponse.status === 'Success') {
+                    logger.info('Existing payment now Success ignore create payment.');
+                    canCreatePayment = false;
                 }
             }
 
+            logger.info(`DEBUG: 0`);
+
             if (typeof get(formdata, 'ccdCase.id') === 'undefined') {
+                logger.info(`DEBUG: 1`);
                 const [result, submissionErrors] = yield this.sendToSubmitService(ctx, errors, formdata, ctx.total);
                 errors = errors.concat(submissionErrors);
                 if (errors.length > 0) {
@@ -104,6 +110,8 @@ class PaymentBreakdown extends Step {
                 set(formdata, 'ccdCase.id', result.caseId);
                 set(formdata, 'ccdCase.state', result.caseState);
             }
+
+            logger.info(`DEBUG: 2`);
 
             if (ctx.total > 0 && canCreatePayment) {
                 session.save();
@@ -154,8 +162,10 @@ class PaymentBreakdown extends Step {
     }
 
     * sendToSubmitService(ctx, errors, formdata, total) {
+        logger.info(`DEBUG: sendToSubmitService`);
         const softStop = this.anySoftStops(formdata, ctx) ? 'softStop' : false;
         set(formdata, 'payment.total', total);
+        
         const submitData = ServiceMapper.map(
             'SubmitData',
             [config.services.submit.url, ctx.sessionID],
@@ -197,11 +207,11 @@ class PaymentBreakdown extends Step {
             const payment = new Payment(paymentServiceUrl, ctx.sessionID);
             const casePaymentsArray = yield payment.getCasePayments(data);
             logger.debug(`Case payments for ${caseId} with response = ${JSON.stringify(casePaymentsArray)}`);
-            const paymentResponse = payment.identifySuccessfulOrInitiatedPayment(casePaymentsArray);
+            const paymentResponse = payment.identifySuccessfulPayment(casePaymentsArray);
             logger.debug(`Payment retrieval in breakdown for caseId = ${caseId} with response = ${JSON.stringify(paymentResponse)}`);
             if (!paymentResponse) {
-                logger.info('No payments of Initiated or Success found for case.');
-            } else if (paymentResponse.status === 'Initiated' || paymentResponse.status === 'Success') {
+                logger.info('No payments of Success found for case.');
+            } else if (paymentResponse.status === 'Success') {
                 paymentStatus = paymentResponse.status;
                 if (paymentResponse.payment_reference !== paymentReference) {
                     logger.info(`Payment with status ${paymentResponse.status} found, using reference ${paymentResponse.payment_reference}.`);

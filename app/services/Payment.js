@@ -46,20 +46,17 @@ class Payment extends Service {
         return [this.fetchJson(url, fetchOptions), body.reference];
     }
 
-    identifySuccessfulOrInitiatedPayment(casePayments) {
+    identifySuccessfulPayment(casePayments) {
         let response = false;
         forEach(casePayments.payments, (payment) => {
             if (payment.status === 'Success') {
                 this.log(`Found a successful payment: ${payment.payment_reference}`);
                 response = payment;
                 return false;
-            } else if (payment.status === 'Initiated') {
-                this.log(`Found an initiated payment: ${payment.payment_reference}`);
-                response = payment;
             }
         });
         if (response === false) {
-            this.log('No payments of Success or Initiated found.');
+            this.log('No payments of Success found.');
         }
         return response;
     }

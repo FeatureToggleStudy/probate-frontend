@@ -14,9 +14,6 @@
     "payment": {
       "failure": {
         "summary": "We could not take your payment, please try again later."
-      },
-      "initiated": {
-        "summary": "Your payment may have failed. Do not try to pay again for 2 hours."
       }
     },
     "submit": {

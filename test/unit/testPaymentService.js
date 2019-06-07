@@ -85,7 +85,7 @@ describe('PaymentService', () => {
         });
     });
 
-    describe('identifySuccessfulOrInitiatedPayment()', () => {
+    describe('identifySuccessfulPayment()', () => {
         it('should log() and capture a Success payment from list', (done) => {
             const endpoint = 'http://localhost';
             const casePayments = {
@@ -104,7 +104,7 @@ describe('PaymentService', () => {
             const payment = new Payment(endpoint, 'abc123');
             const logSpy = sinon.spy(payment, 'log');
 
-            const response = payment.identifySuccessfulOrInitiatedPayment(casePayments);
+            const response = payment.identifySuccessfulPayment(casePayments);
 
             expect(payment.log.calledOnce).to.equal(true);
             expect(payment.log.calledWith('Found a successful payment: RC-1554-1311-2865-4102')).to.equal(true);
@@ -115,36 +115,7 @@ describe('PaymentService', () => {
             done();
         });
 
-        it('should log() and capture a Initiated payment from list', (done) => {
-            const endpoint = 'http://localhost';
-            const casePayments = {
-                'payments': [{
-                    'amount': 216.50,
-                    'ccd_case_number': '1554131023277701',
-                    'payment_reference': 'RC-1554-1311-2865-4101',
-                    'status': 'Initiated'
-                }, {
-                    'amount': 216.50,
-                    'ccd_case_number': '1554131023277701',
-                    'payment_reference': 'RC-1554-1311-2865-4102',
-                    'status': 'Failed'
-                }]
-            };
-            const payment = new Payment(endpoint, 'abc123');
-            const logSpy = sinon.spy(payment, 'log');
-
-            const response = payment.identifySuccessfulOrInitiatedPayment(casePayments);
-
-            expect(payment.log.calledOnce).to.equal(true);
-            expect(payment.log.calledWith('Found an initiated payment: RC-1554-1311-2865-4101')).to.equal(true);
-            expect(response.status).to.equal('Initiated');
-            expect(response.payment_reference).to.equal('RC-1554-1311-2865-4101');
-
-            logSpy.restore();
-            done();
-        });
-
-        it('should log() and return an false for a list without Initiated or Success', (done) => {
+        it('should log() and return a false for a list without Success', (done) => {
             const endpoint = 'http://localhost';
             const casePayments = {
                 'payments': [{
@@ -157,10 +128,10 @@ describe('PaymentService', () => {
             const payment = new Payment(endpoint, 'abc123');
             const logSpy = sinon.spy(payment, 'log');
 
-            const response = payment.identifySuccessfulOrInitiatedPayment(casePayments);
+            const response = payment.identifySuccessfulPayment(casePayments);
 
             expect(payment.log.calledOnce).to.equal(true);
-            expect(payment.log.calledWith('No payments of Success or Initiated found.')).to.equal(true);
+            expect(payment.log.calledWith('No payments of Success found.')).to.equal(true);
             expect(response).to.equal(false);
 
             logSpy.restore();
@@ -175,10 +146,10 @@ describe('PaymentService', () => {
             const payment = new Payment(endpoint, 'abc123');
             const logSpy = sinon.spy(payment, 'log');
 
-            const response = payment.identifySuccessfulOrInitiatedPayment(casePayments);
+            const response = payment.identifySuccessfulPayment(casePayments);
 
             expect(payment.log.calledOnce).to.equal(true);
-            expect(payment.log.calledWith('No payments of Success or Initiated found.')).to.equal(true);
+            expect(payment.log.calledWith('No payments of Success found.')).to.equal(true);
             expect(response).to.equal(false);
 
             logSpy.restore();

@@ -62,16 +62,6 @@ describe('PaymentBreakdown', () => {
             site_id: 'siteId0001',
             external_reference: 12345
         };
-        const initiatedPaymentResponse = {
-            channel: 'Online',
-            amount: 5000,
-            ccd_case_number: '1535395401245028',
-            payment_reference: 'RC-67890',
-            status: 'Initiated',
-            date_updated: '2018-08-29T15:25:11.920+0000',
-            site_id: 'siteId0001',
-            external_reference: 12345
-        };
         let revertAuthorise;
         let expectedPaymentFormdata;
         let expectedPaAppCreatedFormdata;
@@ -466,7 +456,7 @@ describe('PaymentBreakdown', () => {
                     'status': 'Success'
                 }]
             };
-            const identifySuccessfulOrInitiatedPaymentResponse = {
+            const identifySuccessfulPaymentResponse = {
                 'amount': 216.50,
                 'ccd_case_number': '1535395401245028',
                 'payment_reference': 'RC-67890',
@@ -477,8 +467,8 @@ describe('PaymentBreakdown', () => {
                     getCasePayments() {
                         return caseSuccessPaymentResponse;
                     }
-                    identifySuccessfulOrInitiatedPayment() {
-                        return identifySuccessfulOrInitiatedPaymentResponse;
+                    identifySuccessfulPayment() {
+                        return identifySuccessfulPaymentResponse;
                     }
                 }
             });
@@ -536,65 +526,7 @@ describe('PaymentBreakdown', () => {
             });
         });
 
-        it('show initiated error when a ctx.reference has been proven to be still in an initiated state.', (done) => {
-            const getCasePaymentsStub = sinon
-                .stub(Payment.prototype, 'getCasePayments')
-                .returns(initiatedCasePaymentsResponse);
-            const getStub = sinon
-                .stub(Payment.prototype, 'get')
-                .returns(initiatedPaymentResponse);
-            const formdata = {
-                ccdCase: {
-                    id: 1535395401245028,
-                    state: 'PAPaymentFailed'
-                },
-                fees: {
-                    status: 'success',
-                    applicationfee: 215,
-                    applicationvalue: 6000,
-                    ukcopies: 1,
-                    ukcopiesfee: 0.50,
-                    overseascopies: 2,
-                    overseascopiesfee: 1,
-                    total: 216.50
-                },
-                payment: {
-                    reference: 'RC-12345'
-                }
-            };
-            const paymentBreakdown = new PaymentBreakdown(steps, section, templatePath, i18next, schema);
-            expectedPaymentFormdata.payment.reference = 'RC-12345';
-            feesCalculator.returns(Promise.resolve({
-                status: 'success',
-                applicationfee: 215,
-                applicationvalue: 6000,
-                ukcopies: 1,
-                ukcopiesfee: 0.50,
-                overseascopies: 2,
-                overseascopiesfee: 1,
-                total: 216.50
-            }));
-
-            co(function* () {
-                const [ctx, errors] = yield paymentBreakdown.handlePost(ctxTestData, errorsTestData, formdata, session, hostname);
-                expect(ctx).to.deep.equal(ctxTestData);
-                expect(ctx.reference).to.equal('RC-67890');
-                expect(errors).to.deep.equal([{
-                    param: 'payment',
-                    msg: {
-                        summary: 'Your payment may have failed. Do not try to pay again for 2 hours.',
-                        message: 'payment.breakdown.errors.payment.initiated.message'
-                    }
-                }]);
-                getCasePaymentsStub.restore();
-                getStub.restore();
-                done();
-            }).catch((err) => {
-                done(err);
-            });
-        });
-
-        it('show success when a ctx.reference was initiated state but has now expired.', (done) => {
+        it('show success when a ctx.reference was initiated but now success.', (done) => {
             const getCasePaymentsStub = sinon
                 .stub(Payment.prototype, 'getCasePayments')
                 .returns(initiatedCasePaymentsResponse);
@@ -602,10 +534,6 @@ describe('PaymentBreakdown', () => {
                 .stub(Payment.prototype, 'get')
                 .returns(successPaymentResponse);
             const formdata = {
-                ccdCase: {
-                    id: 1535395401245028,
-                    state: 'PAPaymentFailed'
-                },
                 fees: {
                     status: 'success',
                     applicationfee: 215,
@@ -616,12 +544,10 @@ describe('PaymentBreakdown', () => {
                     overseascopiesfee: 1,
                     total: 216.50
                 },
-                payment: {
-                    reference: 'RC-12345'
-                }
             };
             const paymentBreakdown = new PaymentBreakdown(steps, section, templatePath, i18next, schema);
-            expectedPaymentFormdata.payment.reference = 'RC-12345';
+            expectedPaymentFormdata.payment.reference = 'RC-67890';
+            ctxTestData.reference = 'RC-67890';
             feesCalculator.returns(Promise.resolve({
                 status: 'success',
                 applicationfee: 215,
@@ -635,6 +561,7 @@ describe('PaymentBreakdown', () => {
 
             co(function* () {
                 const [ctx, errors] = yield paymentBreakdown.handlePost(ctxTestData, errorsTestData, formdata, session, hostname);
+                expect(formdata).to.deep.equal(expectedPaAppCreatedFormdata);
                 expect(ctx).to.deep.equal(ctxTestData);
                 expect(ctx.reference).to.equal('RC-67890');
                 expect(errors).to.deep.equal(errorsTestData);
