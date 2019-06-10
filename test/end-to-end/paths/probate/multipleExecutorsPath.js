@@ -183,7 +183,7 @@ Scenario(TestConfigurator.idamInUseText('Additional Executor(s) Agree to Stateme
     }
 }).retry(TestConfigurator.getRetryScenarios());
 
-Scenario(TestConfigurator.idamInUseText('Continuation of Main applicant journey: final stage of application'), function (I) {
+Scenario(TestConfigurator.idamInUseText('Continuation of Main applicant journey: final stage of application'), async function (I) {
 
     I.amOnPage(testConfig.TestE2EFrontendUrl);
 
@@ -230,7 +230,7 @@ Scenario(TestConfigurator.idamInUseText('Continuation of Main applicant journey:
     // Sign back in and see thank you page
     I.amOnPage(testConfig.TestE2EFrontendUrl);
     I.authenticateWithIdamIfAvailable();
-    let ccdRef = yield I.grabTextFrom('//strong');
+    let ccdRef = await I.grabTextFrom('//strong');
     ccdRef = ccdRef[1].replace(/-/g, '');
     I.seeThankYouPage();
 

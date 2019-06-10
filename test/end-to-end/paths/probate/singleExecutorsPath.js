@@ -1,5 +1,6 @@
 'use strict';
 
+const taskListContent = require('app/resources/en/translation/tasklist');
 const TestConfigurator = new (require('test/end-to-end/helpers/TestConfigurator'))();
 const testConfig = require('test/config.js');
 const paymentType = testConfig.paymentType;
@@ -19,7 +20,7 @@ After(() => {
     TestConfigurator.getAfter();
 });
 
-Scenario(TestConfigurator.idamInUseText('Single Executor Journey'), function (I) {
+Scenario(TestConfigurator.idamInUseText('Single Executor Journey'), async function (I) {
 
     // Eligibility Task (pre IdAM)
     I.startApplication();
@@ -133,7 +134,7 @@ Scenario(TestConfigurator.idamInUseText('Single Executor Journey'), function (I)
     // Sign back in and see thank you page
     I.amOnPage(testConfig.TestE2EFrontendUrl);
     I.authenticateWithIdamIfAvailable();
-    let ccdRef = yield I.grabTextFrom('//strong');
+    let ccdRef = await I.grabTextFrom('//strong');
     ccdRef = ccdRef[1].replace(/-/g, '');
     I.seeThankYouPage();
 

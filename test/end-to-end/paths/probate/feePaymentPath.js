@@ -45,7 +45,7 @@ Data(TestConfigurator.createFeeInfoTable()).Scenario('Fee Payment: Check payment
     I.seeThankYouPage();
 });
 
-Data(TestConfigurator.createFeeInfoTableFor1Copy()).Scenario('Fee Payment: Check can pay after cancel payment for no application fee', function (I, current) {
+Data(TestConfigurator.createFeeInfoTableFor1Copy()).Scenario('Fee Payment: Check can pay after cancel payment for no application fee', async function (I, current) {
     data.copies.uk = current.noUKCopies;
     data.copies.overseas = current.noOverseasCopies;
     data.iht.grossValue = current.grossValue;
@@ -77,7 +77,7 @@ Data(TestConfigurator.createFeeInfoTableFor1Copy()).Scenario('Fee Payment: Check
     // Sign back in and see thank you page
     I.amOnPage(testConfig.TestE2EFrontendUrl);
     I.authenticateWithIdamIfAvailable();
-    let ccdRef = yield I.grabTextFrom('//strong');
+    let ccdRef = await I.grabTextFrom('//strong');
     ccdRef = ccdRef[1].replace(/-/g, '');
     I.seeThankYouPage();
     // Find case on CCD
