@@ -1,16 +1,14 @@
+/* eslint-disable no-undef */
 'use strict';
 
 const TestConfigurator = new (require('test/end-to-end/helpers/TestConfigurator'))();
 const {forEach, head} = require('lodash');
 const testConfig = require('test/config.js');
-const paymentType = testConfig.paymentType;
-const copies = testConfig.copies;
 
 let grabIds;
 let retries = -1;
 
-Feature('Multiple Executors flow');
-// .retry(TestConfigurator.getRetryFeatures());
+Feature('All Alias Reasons').retry(TestConfigurator.getRetryFeatures());
 
 // eslint complains that the Before/After are not used but they are by codeceptjs
 // so we have to tell eslint to not validate these
@@ -24,7 +22,7 @@ AfterSuite(() => {
     TestConfigurator.getAfter();
 });
 
-Scenario(TestConfigurator.idamInUseText('Multiple Executors Journey - Main applicant: 1st stage of completing application'), async function (I) {
+Scenario(TestConfigurator.idamInUseText('Multiple Executors Journey - Main applicant: 1st stage of completing application'), function* (I) {
     retries += 1;
 
     if (retries >= 1) {
@@ -65,7 +63,7 @@ Scenario(TestConfigurator.idamInUseText('Multiple Executors Journey - Main appli
     // IdAM
     I.authenticateWithIdamIfAvailable();
 
-    // Deceased Task
+    // DeceasedTask
     I.selectATask();
     I.enterDeceasedName('Deceased First Name', 'Deceased Last Name');
     I.enterDeceasedDateOfBirth('01', '01', '1950');
@@ -75,53 +73,46 @@ Scenario(TestConfigurator.idamInUseText('Multiple Executors Journey - Main appli
     I.selectInheritanceMethodPaper();
 
     if (TestConfigurator.getUseGovPay() === 'true') {
-        I.enterGrossAndNet(paymentType.form, paymentType.pay.gross, paymentType.pay.net);
+        I.enterGrossAndNet('205', '600000', '300000');
     } else {
-        I.enterGrossAndNet(paymentType.form, paymentType.noPay.gross, paymentType.noPay.net);
+        I.enterGrossAndNet('205', '500', '400');
     }
 
-    I.selectDeceasedAlias('Yes');
-    I.selectOtherNames('2');
+    I.selectDeceasedAlias('No');
     I.selectDeceasedMarriedAfterDateOnWill('No');
-    I.selectWillCodicils('Yes');
-    I.selectWillNoOfCodicils('3');
+    I.selectWillCodicils('No');
 
     // ExecutorsTask
     I.selectATask();
     I.enterApplicantName('Applicant First Name', 'Applicant Last Name');
     I.selectNameAsOnTheWill('No');
-    I.enterApplicantAlias('applicant_alias');
-    I.enterApplicantAliasReason('aliasOther', 'alias_other_reason');
+    I.enterApplicantAlias('Polly');
+    I.enterApplicantAliasReason('aliasOther', 'Witness protection');
     I.enterApplicantPhone();
     I.enterAddressManually();
 
-    const totalExecutors = '7';
+    const totalExecutors = '4';
     I.enterTotalExecutors(totalExecutors);
     I.enterExecutorNames(totalExecutors);
-    I.selectExecutorsAllAlive('No');
-
-    const executorsWhoDiedList = ['2', '7'];
-    let diedBefore = true;
-    I.selectExecutorsWhoDied(executorsWhoDiedList);
-
-    forEach(executorsWhoDiedList, executorNumber => {
-        I.selectExecutorsWhenDied(executorNumber, diedBefore, head(executorsWhoDiedList) === executorNumber);
-
-        diedBefore = !diedBefore;
-    });
+    I.selectExecutorsAllAlive('Yes');
 
     I.selectExecutorsApplying('Yes');
 
-    const executorsApplyingList = ['3', '5'];
-    I.selectExecutorsDealingWithEstate(executorsApplyingList, true);
+    const executorsApplyingList = ['2', '3', '4'];
+    I.selectExecutorsDealingWithEstate(executorsApplyingList, false);
+
     I.selectExecutorsWithDifferentNameOnWill('Yes');
 
-    const executorsWithDifferentNameList = ['5'];
+    const executorsWithDifferentNameList = ['2', '3', '4'];
     I.selectWhichExecutorsWithDifferentNameOnWill(executorsApplyingList, executorsWithDifferentNameList);
 
+    const aliasReasonList = ['aliasMarriage', 'aliasDivorce', 'aliasDeedPoll'];
+
+    let currentIteration = 0;
     forEach(executorsWithDifferentNameList, executorNumber => {
         I.enterExecutorCurrentName(executorNumber, head(executorsWithDifferentNameList) === executorNumber);
-        I.enterExecutorCurrentNameReason(executorNumber, 'aliasOther', 'executor_alias_reason');
+        I.enterExecutorCurrentNameReason(executorNumber, aliasReasonList[currentIteration], 'Because YOLO');
+        currentIteration += 1;
     });
 
     forEach(executorsApplyingList, executorNumber => {
@@ -129,20 +120,7 @@ Scenario(TestConfigurator.idamInUseText('Multiple Executors Journey - Main appli
         I.enterExecutorManualAddress(executorNumber);
     });
 
-    const executorsNotApplyingList = ['4', '6'];
-    let powerReserved = true;
-    forEach(executorsNotApplyingList, executorNumber => {
-        I.selectExecutorRoles(executorNumber, powerReserved, head(executorsNotApplyingList) === executorNumber);
-
-        if (powerReserved) {
-            I.selectHasExecutorBeenNotified('Yes', executorNumber);
-            powerReserved = false;
-        } else {
-            powerReserved = true;
-        }
-    });
-
-    // Review and Confirm Task
+    // Review and confirm Task
     I.selectATask();
     I.seeSummaryPage('declaration');
     I.acceptDeclaration();
@@ -152,22 +130,20 @@ Scenario(TestConfigurator.idamInUseText('Multiple Executors Journey - Main appli
 
     //Retrieve the email urls for additional executors
     I.amOnPage(testConfig.TestInviteIdListUrl);
-
-    grabIds = await I.grabTextFrom('pre');
-
+    grabIds = yield I.grabTextFrom('pre');
 }).retry(TestConfigurator.getRetryScenarios());
 
-Scenario(TestConfigurator.idamInUseText('Additional Executor(s) Agree to Statement of Truth'), async function (I) {
+Scenario(TestConfigurator.idamInUseText('Additional Executor(s) Agree to Statement of Truth'), function* (I) {
     const idList = JSON.parse(grabIds);
 
     for (let i=0; i < idList.ids.length; i++) {
         I.amOnPage(testConfig.TestInvitationUrl + '/' + idList.ids[i]);
         I.amOnPage(testConfig.TestE2EFrontendUrl + '/pin');
 
-        const grabPins = await I.grabTextFrom('pre'); // eslint-disable-line no-await-in-loop
+        const grabPins = yield I.grabTextFrom('pre');
         const pinList = JSON.parse(grabPins);
 
-        await I.clickBrowserBackButton(); // eslint-disable-line no-await-in-loop
+        yield I.clickBrowserBackButton();
 
         I.enterPinCode(pinList.pin.toString());
         I.seeCoApplicantStartPage();
@@ -179,39 +155,38 @@ Scenario(TestConfigurator.idamInUseText('Additional Executor(s) Agree to Stateme
         } else {
             I.seeAgreePage();
         }
-
     }
-}).retry(TestConfigurator.getRetryScenarios());
+});
 
-Scenario(TestConfigurator.idamInUseText('Continuation of Main applicant journey: final stage of application'), function (I) {
-
+Scenario(TestConfigurator.idamInUseText('Continuation of Main applicant journey: final stage of application'), function* (I) {
+    // IDAM
     I.amOnPage(testConfig.TestE2EFrontendUrl);
 
-    // IDAM
+    // IdAM
     I.authenticateWithIdamIfAvailable();
 
-    // Extra Copies Task
+    // Extra copies task
     I.selectATask();
 
     if (TestConfigurator.getUseGovPay() === 'true') {
-        I.enterUkCopies(copies.pay.uk);
+        I.enterUkCopies('5');
         I.selectOverseasAssets();
-        I.enterOverseasCopies(copies.pay.overseas);
+        I.enterOverseasCopies('7');
     } else {
-        I.enterUkCopies(copies.noPay.uk);
+        I.enterUkCopies('0');
         I.selectOverseasAssets();
-        I.enterOverseasCopies(copies.noPay.overseas);
+        I.enterOverseasCopies('0');
     }
 
     I.seeCopiesSummary();
 
-    // Payment Task
+    // PaymentTask
     I.selectATask();
 
     if (TestConfigurator.getUseGovPay() === 'true') {
-        I.seePaymentBreakdownPage(copies.pay.uk, copies.pay.overseas, paymentType.pay.net);
+        I.seePaymentBreakdownPage('5', '7', '300000');
     } else {
-        I.seePaymentBreakdownPage(copies.noPay.uk, copies.noPay.overseas, paymentType.noPay.net);
+        I.seePaymentBreakdownPage('0', '0', '400');
     }
 
     if (TestConfigurator.getUseGovPay() === 'true') {
@@ -224,7 +199,7 @@ Scenario(TestConfigurator.idamInUseText('Continuation of Main applicant journey:
     // Send Documents Task
     I.seeDocumentsPage();
 
-    // Thank You
+    // Thank You - Application Complete Task
     I.seeThankYouPage();
 
     // Sign back in and see thank you page

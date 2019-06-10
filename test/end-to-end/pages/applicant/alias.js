@@ -7,6 +7,5 @@ module.exports = function (alias) {
     const I = this;
     I.seeCurrentUrlEquals(pageUnderTest.getUrl());
     I.fillField('#alias', alias);
-
     I.waitForNavigationToComplete(`input[value="${commonContent.saveAndContinue}"]`);
 };

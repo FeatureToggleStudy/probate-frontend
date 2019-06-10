@@ -1,6 +1,5 @@
 'use strict';
 
-const taskListContent = require('app/resources/en/translation/tasklist');
 const TestConfigurator = new (require('test/end-to-end/helpers/TestConfigurator'))();
 const testConfig = require('test/config.js');
 const paymentType = testConfig.paymentType;
@@ -57,7 +56,7 @@ xScenario(TestConfigurator.idamInUseText('Intestacy Journey'), function (I) {
     I.authenticateWithIdamIfAvailable();
 
     // Deceased Task
-    I.selectATask(taskListContent.taskNotStarted);
+    I.selectATask();
     I.enterDeceasedDetails('Deceased First Name', 'Deceased Last Name', '01', '01', '1950', '01', '01', '2017');
     I.enterDeceasedAddress();
     I.selectDocumentsToUpload();

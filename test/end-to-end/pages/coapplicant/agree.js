@@ -2,12 +2,12 @@
 
 const pageUnderTest = require('app/steps/ui/coapplicant/agreepage');
 
-module.exports = function (elementId) {
+module.exports = function (isLast = false) {
     const I = this;
 
     I.seeCurrentUrlEquals(pageUnderTest.getUrl());
 
-    if (elementId === 0) {
+    if (!isLast) {
         I.see('When everyone');
     } else {
         I.see('All executors applying');

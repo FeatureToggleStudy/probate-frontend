@@ -1,11 +1,9 @@
 'use strict';
 
-const taskListContent = require('app/resources/en/translation/tasklist');
-
 exports.completeEligibilityTask = function () {
     const I = this;
     I.startApplication();
-    I.selectATask(taskListContent.taskNotStarted);
+    I.selectATask();
     I.selectPersonWhoDiedLeftAWill();
     I.selectOriginalWill();
     I.selectAndEnterWillDate('1', '1', '2017');
@@ -15,7 +13,7 @@ exports.completeEligibilityTask = function () {
 
 exports.completeExecutorsTask = function () {
     const I = this;
-    I.selectATask(taskListContent.taskNotStarted);
+    I.selectATask();
     I.enterApplicantName('Applicant First Name', 'Applicant Last Name');
     I.selectNameAsOnTheWill();
     I.enterApplicantPhone();

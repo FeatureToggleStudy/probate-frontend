@@ -69,6 +69,7 @@ module.exports = function () {
 
         // Summary page
         seeSummaryPage: steps.summary.summary,
+        seeSummaryContent: steps.summary.content,
         acceptDeclaration: steps.declaration.declaration,
 
         // Notify additional executors
@@ -103,6 +104,10 @@ module.exports = function () {
 
         // Thank You
         seeThankYouPage: steps.thankyou.thankyou,
+
+        // CCD
+        authenticateCCDWithIdam: steps.ccd.signIn,
+        searchCases: steps.ccd.search,
 
         // Intestacy
         enterDeceasedDetails: steps.deceased.details,

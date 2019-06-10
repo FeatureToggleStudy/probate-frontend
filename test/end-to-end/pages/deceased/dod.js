@@ -12,7 +12,6 @@ module.exports = function (day, month, year, saveAndClose = false) {
     I.fillField('#dod_year', year);
 
     if (saveAndClose) {
-        //I.waitForNavigationToComplete(`a[href="${commonContent.saveAndClose}"]`);
         I.waitForNavigationToComplete('.column-two-thirds > p a');
     } else {
         I.waitForNavigationToComplete(`input[value="${commonContent.saveAndContinue}"]`);

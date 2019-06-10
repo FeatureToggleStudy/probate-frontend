@@ -1,6 +1,5 @@
 'use strict';
 
-const taskListContent = require('app/resources/en/translation/tasklist');
 const TestConfigurator = new (require('test/end-to-end/helpers/TestConfigurator'))();
 const signOutPage = require('app/steps/ui/signout');
 
@@ -36,7 +35,7 @@ Scenario(TestConfigurator.idamInUseText('Save And Close Link Click Flow'), funct
     I.authenticateWithIdamIfAvailable();
 
     // Deceased Details
-    I.selectATask(taskListContent.taskNotStarted);
+    I.selectATask();
     I.enterDeceasedName('Deceased First Name', 'Deceased Last Name');
     I.enterDeceasedDateOfBirth('01', '01', '1950');
     I.enterDeceasedDateOfDeath('01', '01', '2017', true);

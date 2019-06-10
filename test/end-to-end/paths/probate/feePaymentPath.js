@@ -73,4 +73,19 @@ Data(TestConfigurator.createFeeInfoTableFor1Copy()).Scenario('Fee Payment: Check
 
     // Thank You - Application Complete Task
     I.seeThankYouPage();
+
+    // Sign back in and see thank you page
+    I.amOnPage(testConfig.TestE2EFrontendUrl);
+    I.authenticateWithIdamIfAvailable();
+    let ccdRef = yield I.grabTextFrom('//strong');
+    ccdRef = ccdRef[1].replace(/-/g, '');
+    I.seeThankYouPage();
+    // Find case on CCD
+
+    I.waitForNavigationToComplete(testConfig.TestCCDUrl);
+    I.authenticateCCDWithIdam();
+    I.searchCases(ccdRef);
+    I.click('Deceased');
+    I.see('John');
+    I.see('Doe');
 });

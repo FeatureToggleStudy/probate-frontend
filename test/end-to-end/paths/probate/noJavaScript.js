@@ -3,14 +3,11 @@
 const TestConfigurator = new (require('test/end-to-end/helpers/TestConfigurator'))();
 const {forEach, head} = require('lodash');
 const testConfig = require('test/config.js');
-const paymentType = testConfig.paymentType;
-const copies = testConfig.copies;
 
 let grabIds;
 let retries = -1;
 
-Feature('Multiple Executors flow');
-// .retry(TestConfigurator.getRetryFeatures());
+Feature('Multiple Executors flow').retry(TestConfigurator.getRetryFeatures());
 
 // eslint complains that the Before/After are not used but they are by codeceptjs
 // so we have to tell eslint to not validate these
@@ -24,12 +21,14 @@ AfterSuite(() => {
     TestConfigurator.getAfter();
 });
 
-Scenario(TestConfigurator.idamInUseText('Multiple Executors Journey - Main applicant: 1st stage of completing application'), async function (I) {
+Scenario(TestConfigurator.idamInUseText('Multiple Executors Journey - Main applicant: 1st stage of completing application'), function* (I) {
     retries += 1;
 
     if (retries >= 1) {
         TestConfigurator.getBefore();
     }
+
+    I.enableJavaScript(false);
 
     // Eligibility Task (pre IdAM)
     I.startApplication();
@@ -71,13 +70,13 @@ Scenario(TestConfigurator.idamInUseText('Multiple Executors Journey - Main appli
     I.enterDeceasedDateOfBirth('01', '01', '1950');
     I.enterDeceasedDateOfDeath('01', '01', '2017');
     I.enterDeceasedAddress();
-    I.selectDocumentsToUpload();
+    I.selectDocumentsToUpload(true);
     I.selectInheritanceMethodPaper();
 
     if (TestConfigurator.getUseGovPay() === 'true') {
-        I.enterGrossAndNet(paymentType.form, paymentType.pay.gross, paymentType.pay.net);
+        I.enterGrossAndNet('205', '600000', '300000');
     } else {
-        I.enterGrossAndNet(paymentType.form, paymentType.noPay.gross, paymentType.noPay.net);
+        I.enterGrossAndNet('205', '500', '400');
     }
 
     I.selectDeceasedAlias('Yes');
@@ -112,11 +111,11 @@ Scenario(TestConfigurator.idamInUseText('Multiple Executors Journey - Main appli
 
     I.selectExecutorsApplying('Yes');
 
-    const executorsApplyingList = ['3', '5'];
+    const executorsApplyingList = ['4', '6'];
     I.selectExecutorsDealingWithEstate(executorsApplyingList, true);
     I.selectExecutorsWithDifferentNameOnWill('Yes');
 
-    const executorsWithDifferentNameList = ['5'];
+    const executorsWithDifferentNameList = ['6'];
     I.selectWhichExecutorsWithDifferentNameOnWill(executorsApplyingList, executorsWithDifferentNameList);
 
     forEach(executorsWithDifferentNameList, executorNumber => {
@@ -129,7 +128,7 @@ Scenario(TestConfigurator.idamInUseText('Multiple Executors Journey - Main appli
         I.enterExecutorManualAddress(executorNumber);
     });
 
-    const executorsNotApplyingList = ['4', '6'];
+    const executorsNotApplyingList = ['3', '5'];
     let powerReserved = true;
     forEach(executorsNotApplyingList, executorNumber => {
         I.selectExecutorRoles(executorNumber, powerReserved, head(executorsNotApplyingList) === executorNumber);
@@ -153,21 +152,21 @@ Scenario(TestConfigurator.idamInUseText('Multiple Executors Journey - Main appli
     //Retrieve the email urls for additional executors
     I.amOnPage(testConfig.TestInviteIdListUrl);
 
-    grabIds = await I.grabTextFrom('pre');
+    grabIds = yield I.grabTextFrom('pre');
 
 }).retry(TestConfigurator.getRetryScenarios());
 
-Scenario(TestConfigurator.idamInUseText('Additional Executor(s) Agree to Statement of Truth'), async function (I) {
+Scenario(TestConfigurator.idamInUseText('Additional Executor(s) Agree to Statement of Truth'), function* (I) {
     const idList = JSON.parse(grabIds);
 
     for (let i=0; i < idList.ids.length; i++) {
         I.amOnPage(testConfig.TestInvitationUrl + '/' + idList.ids[i]);
         I.amOnPage(testConfig.TestE2EFrontendUrl + '/pin');
 
-        const grabPins = await I.grabTextFrom('pre'); // eslint-disable-line no-await-in-loop
+        const grabPins = yield I.grabTextFrom('pre');
         const pinList = JSON.parse(grabPins);
 
-        await I.clickBrowserBackButton(); // eslint-disable-line no-await-in-loop
+        yield I.clickBrowserBackButton();
 
         I.enterPinCode(pinList.pin.toString());
         I.seeCoApplicantStartPage();
@@ -183,7 +182,7 @@ Scenario(TestConfigurator.idamInUseText('Additional Executor(s) Agree to Stateme
     }
 }).retry(TestConfigurator.getRetryScenarios());
 
-Scenario(TestConfigurator.idamInUseText('Continuation of Main applicant journey: final stage of application'), function (I) {
+Scenario(TestConfigurator.idamInUseText('Continuation of Main applicant journey: final stage of application'), function* (I) {
 
     I.amOnPage(testConfig.TestE2EFrontendUrl);
 
@@ -194,13 +193,13 @@ Scenario(TestConfigurator.idamInUseText('Continuation of Main applicant journey:
     I.selectATask();
 
     if (TestConfigurator.getUseGovPay() === 'true') {
-        I.enterUkCopies(copies.pay.uk);
+        I.enterUkCopies('5');
         I.selectOverseasAssets();
-        I.enterOverseasCopies(copies.pay.overseas);
+        I.enterOverseasCopies('7');
     } else {
-        I.enterUkCopies(copies.noPay.uk);
+        I.enterUkCopies('0');
         I.selectOverseasAssets();
-        I.enterOverseasCopies(copies.noPay.overseas);
+        I.enterOverseasCopies('0');
     }
 
     I.seeCopiesSummary();
@@ -209,9 +208,9 @@ Scenario(TestConfigurator.idamInUseText('Continuation of Main applicant journey:
     I.selectATask();
 
     if (TestConfigurator.getUseGovPay() === 'true') {
-        I.seePaymentBreakdownPage(copies.pay.uk, copies.pay.overseas, paymentType.pay.net);
+        I.seePaymentBreakdownPage('5', '7', '300000');
     } else {
-        I.seePaymentBreakdownPage(copies.noPay.uk, copies.noPay.overseas, paymentType.noPay.net);
+        I.seePaymentBreakdownPage('0', '0', '400');
     }
 
     if (TestConfigurator.getUseGovPay() === 'true') {
@@ -242,4 +241,5 @@ Scenario(TestConfigurator.idamInUseText('Continuation of Main applicant journey:
     I.see('Deceased First Name');
     I.see('Deceased Last Name');
 
+    I.enableJavaScript(true);
 }).retry(TestConfigurator.getRetryScenarios());

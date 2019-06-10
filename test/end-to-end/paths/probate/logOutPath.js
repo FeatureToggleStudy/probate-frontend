@@ -1,28 +1,23 @@
-/* eslint-disable no-undef */
 'use strict';
 
-const taskListContent = require('app/resources/en/translation/tasklist');
 const TestConfigurator = new (require('test/end-to-end/helpers/TestConfigurator'))();
 const testConfig = require('test/config.js');
-const {forEach, head} = require('lodash');
-const paymentType = testConfig.paymentType;
-const copies = testConfig.copies;
 
-Feature('Cancel Additional Executors Flow');
+Feature('Single Executor flow').retry(TestConfigurator.getRetryFeatures());
 
 // eslint complains that the Before/After are not used but they are by codeceptjs
 // so we have to tell eslint to not validate these
 // eslint-disable-next-line no-undef
-BeforeSuite(() => {
+Before(() => {
     TestConfigurator.getBefore();
 });
 
 // eslint-disable-next-line no-undef
-AfterSuite(() => {
+After(() => {
     TestConfigurator.getAfter();
 });
 
-Scenario(TestConfigurator.idamInUseText('Cancel Additional Executors Journey: 1st stage of completing application'), function (I) {
+Scenario(TestConfigurator.idamInUseText('Single Executor Journey'), function* (I) {
 
     // Eligibility Task (pre IdAM)
     I.startApplication();
@@ -59,7 +54,7 @@ Scenario(TestConfigurator.idamInUseText('Cancel Additional Executors Journey: 1s
     I.authenticateWithIdamIfAvailable();
 
     // Deceased Details
-    I.selectATask(taskListContent.taskNotStarted);
+    I.selectATask();
     I.enterDeceasedName('Deceased First Name', 'Deceased Last Name');
     I.enterDeceasedDateOfBirth('01', '01', '1950');
     I.enterDeceasedDateOfDeath('01', '01', '2017');
@@ -68,90 +63,93 @@ Scenario(TestConfigurator.idamInUseText('Cancel Additional Executors Journey: 1s
     I.selectInheritanceMethodPaper();
 
     if (TestConfigurator.getUseGovPay() === 'true') {
-        I.enterGrossAndNet(paymentType.form, paymentType.pay.gross, paymentType.pay.net);
+        I.enterGrossAndNet('205', '600000', '300000');
     } else {
-        I.enterGrossAndNet(paymentType.form, paymentType.noPay.gross, paymentType.noPay.net);
+        I.enterGrossAndNet('205', '500', '400');
     }
 
-    I.selectDeceasedAlias('No');
+    I.selectDeceasedAlias('Yes');
+    I.selectOtherNames('2');
     I.selectDeceasedMarriedAfterDateOnWill('No');
-    I.selectWillCodicils('No');
+    I.selectWillCodicils('Yes');
+    I.selectWillNoOfCodicils('3');
+
+    // Section 1 Check
+    I.waitForNavigationToComplete('a[href="/sign-out"]');
+    I.waitForNavigationToComplete('a[href="/"]');
+    I.authenticateWithIdamIfAvailable();
+    I.waitForNavigationToComplete('a[href="/summary/*"]');
+    I.seeSummaryContent('1');
 
     // ExecutorsTask
-    I.selectATask(taskListContent.taskNotStarted);
+    I.selectATask();
     I.enterApplicantName('Applicant First Name', 'Applicant Last Name');
-    I.selectNameAsOnTheWill('Yes');
+    I.selectNameAsOnTheWill('No');
+    I.enterApplicantAlias('Applicant Alias');
+    I.enterApplicantAliasReason('aliasOther', 'Applicant_alias_reason');
     I.enterApplicantPhone();
     I.enterAddressManually();
 
-    const totalExecutors = '3';
+    const totalExecutors = '1';
     I.enterTotalExecutors(totalExecutors);
-    I.enterExecutorNames(totalExecutors);
-    I.selectExecutorsAllAlive('Yes');
-    I.selectExecutorsApplying('Yes');
 
-    const executorsApplyingList = ['2', '3'];
-    I.selectExecutorsDealingWithEstate(executorsApplyingList, false);
-    I.selectExecutorsWithDifferentNameOnWill('No');
-
-    forEach(executorsApplyingList, executorNumber => {
-        I.enterExecutorContactDetails(executorNumber, head(executorsApplyingList) === executorNumber);
-        I.enterExecutorManualAddress(executorNumber);
-    });
-
-    // Review and confirm Task
-    I.selectATask(taskListContent.taskNotStarted);
-    I.seeSummaryPage('declaration');
-    I.acceptDeclaration();
+    // Section 2 Check
     I.waitForNavigationToComplete('a[href="/sign-out"]');
     I.waitForNavigationToComplete('a[href="/"]');
-
-    // IdAM
     I.authenticateWithIdamIfAvailable();
     I.waitForNavigationToComplete('a[href="/summary/*"]');
-    I.waitForNavigationToComplete('a[href="/other-executors-applying"]');
-    I.selectExecutorsApplying('No');
-    I.selectExecutorRoles('2', true, true);
-    I.selectHasExecutorBeenNotified('Yes', '2');
-    I.selectExecutorRoles('3', false, false);
-    I.waitForNavigationToComplete('a[href="/sign-out"]');
-}).retry(TestConfigurator.getRetryScenarios());
+    I.seeSummaryContent('2');
 
-Scenario(TestConfigurator.idamInUseText('Continuation of applicant journey: final stage of application'), function (I) {
-
-    I.amOnPage(testConfig.TestE2EFrontendUrl);
-
-    // IdAM
-    I.authenticateWithIdamIfAvailable();
-
-    // Review and confirm Task
-    I.selectATask(taskListContent.taskNotStarted);
+    // Review and Confirm Task
+    I.selectATask();
     I.seeSummaryPage('declaration');
     I.acceptDeclaration();
 
-    //Extra Copies Task
-    I.selectATask(taskListContent.taskNotStarted);
-    I.enterUkCopies(copies.pay.uk);
-    I.selectOverseasAssets();
-    I.enterOverseasCopies(copies.pay.overseas);
-    I.seeCopiesSummary();
+    // Section 3 Check
+    I.waitForNavigationToComplete('a[href="/sign-out"]');
+    I.waitForNavigationToComplete('a[href="/"]');
+    I.authenticateWithIdamIfAvailable();
 
-    //PaymentTask
-    I.selectATask(taskListContent.taskNotStarted);
+    // Extra Copies Task
+    I.selectATask();
+
     if (TestConfigurator.getUseGovPay() === 'true') {
-        I.seePaymentBreakdownPage(copies.pay.uk, copies.pay.overseas, paymentType.pay.net);
+        I.enterUkCopies('5');
+        I.selectOverseasAssets();
+        I.enterOverseasCopies('7');
     } else {
-        I.seePaymentBreakdownPage(copies.pay.uk, copies.pay.overseas, paymentType.noPay.net);
+        I.enterUkCopies('0');
+        I.selectOverseasAssets();
+        I.enterOverseasCopies('0');
     }
 
-    I.seeGovUkPaymentPage();
-    I.seeGovUkConfirmPage();
+    I.seeCopiesSummary();
+
+    // Section 4 Check
+    I.waitForNavigationToComplete('a[href="/sign-out"]');
+    I.waitForNavigationToComplete('a[href="/"]');
+    I.authenticateWithIdamIfAvailable();
+
+    // Payment Task
+    I.selectATask();
+
+    if (TestConfigurator.getUseGovPay() === 'true') {
+        I.seePaymentBreakdownPage('5', '7', '300000');
+    } else {
+        I.seePaymentBreakdownPage('0', '0', '400');
+    }
+
+    if (TestConfigurator.getUseGovPay() === 'true') {
+        I.seeGovUkPaymentPage();
+        I.seeGovUkConfirmPage();
+    }
+
     I.seePaymentStatusPage();
 
     // Send Documents Task
     I.seeDocumentsPage();
 
-    // Thank You - Application Complete Task
+    // Thank You
     I.seeThankYouPage();
 
     // Sign back in and see thank you page

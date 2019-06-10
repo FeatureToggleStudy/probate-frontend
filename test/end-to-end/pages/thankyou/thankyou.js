@@ -11,6 +11,5 @@ module.exports = function () {
     I.click('#checkAnswerHref');
     I.click('#declarationPdfHref');
     I.click('#coverSheetPdfHref');
-
-    I.click('#sign-out-header');
+    I.waitForNavigationToComplete('a[href="/sign-out"]');
 };

@@ -2,8 +2,6 @@
 
 const TestConfigurator = new (require('test/end-to-end/helpers/TestConfigurator'))();
 const testConfig = require('test/config.js');
-const paymentType = testConfig.paymentType;
-const copies = testConfig.copies;
 
 Feature('Single Executor flow').retry(TestConfigurator.getRetryFeatures());
 
@@ -19,7 +17,12 @@ After(() => {
     TestConfigurator.getAfter();
 });
 
-Scenario(TestConfigurator.idamInUseText('Single Executor Journey'), function (I) {
+Scenario(TestConfigurator.idamInUseText('Single Executor Journey From IDAM'), function* (I) {
+
+    I.amOnPage(testConfig.TestE2EFrontendUrl);
+
+    // IdAM
+    I.authenticateWithIdamIfAvailable();
 
     // Eligibility Task (pre IdAM)
     I.startApplication();
@@ -52,9 +55,6 @@ Scenario(TestConfigurator.idamInUseText('Single Executor Journey'), function (I)
 
     I.startApply();
 
-    // IdAM
-    I.authenticateWithIdamIfAvailable();
-
     // Deceased Details
     I.selectATask();
     I.enterDeceasedName('Deceased First Name', 'Deceased Last Name');
@@ -65,9 +65,9 @@ Scenario(TestConfigurator.idamInUseText('Single Executor Journey'), function (I)
     I.selectInheritanceMethodPaper();
 
     if (TestConfigurator.getUseGovPay() === 'true') {
-        I.enterGrossAndNet(paymentType.form, paymentType.pay.gross, paymentType.pay.net);
+        I.enterGrossAndNet('205', '600000', '300000');
     } else {
-        I.enterGrossAndNet(paymentType.form, paymentType.noPay.gross, paymentType.noPay.net);
+        I.enterGrossAndNet('205', '500', '400');
     }
 
     I.selectDeceasedAlias('Yes');
@@ -97,24 +97,24 @@ Scenario(TestConfigurator.idamInUseText('Single Executor Journey'), function (I)
     I.selectATask();
 
     if (TestConfigurator.getUseGovPay() === 'true') {
-        I.enterUkCopies(copies.pay.uk);
+        I.enterUkCopies('5');
         I.selectOverseasAssets();
-        I.enterOverseasCopies(copies.pay.overseas);
+        I.enterOverseasCopies('7');
     } else {
-        I.enterUkCopies(copies.noPay.uk);
+        I.enterUkCopies('0');
         I.selectOverseasAssets();
-        I.enterOverseasCopies(copies.noPay.overseas);
+        I.enterOverseasCopies('0');
     }
 
     I.seeCopiesSummary();
 
     // Payment Task
-    I.selectATask(taskListContent.taskNotStarted);
+    I.selectATask();
 
     if (TestConfigurator.getUseGovPay() === 'true') {
-        I.seePaymentBreakdownPage(copies.pay.uk, copies.pay.overseas, paymentType.pay.net);
+        I.seePaymentBreakdownPage('5', '7', '300000');
     } else {
-        I.seePaymentBreakdownPage(copies.noPay.uk, copies.noPay.overseas, paymentType.noPay.net);
+        I.seePaymentBreakdownPage('0', '0', '400');
     }
 
     if (TestConfigurator.getUseGovPay() === 'true') {

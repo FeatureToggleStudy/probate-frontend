@@ -3,11 +3,11 @@
 const commonContent = require('app/resources/en/translation/common');
 const pageUnderTest = require('app/steps/ui/applicant/name');
 
-module.exports = function (firstname, lastname) {
+module.exports = function (firstName, lastName) {
     const I = this;
     I.seeCurrentUrlEquals(pageUnderTest.getUrl());
-    I.fillField('#firstName', firstname);
-    I.fillField('#lastName', lastname);
+    I.fillField('#firstName', firstName);
+    I.fillField('#lastName', lastName);
 
     I.waitForNavigationToComplete(`input[value="${commonContent.saveAndContinue}"]`);
 };
