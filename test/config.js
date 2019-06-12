@@ -1,7 +1,7 @@
 module.exports = {
 
     TestCitizenDomain: process.env.CITIZEN_EMAIL_DOMAIN || '/@probateTest.com',
-    TestDocumentToUpload: 'uploadDocuments/test_file_for_document_upload.png',
+    TestDocumentsToUpload: ['uploadDocuments/bmp_test_file_for_document_upload.bmp', 'uploadDocuments/jpg_test_file_for_document_upload.jpg', 'uploadDocuments/pdf_test_file_for_document_upload.pdf', 'uploadDocuments/png_test_file_for_document_upload.png', 'uploadDocuments/tiff_test_file_for_document_upload.tiff'],
     TestE2EFrontendUrl: process.env.TEST_E2E_URL || 'http://localhost:3000',
     TestFrontendUrl: process.env.TEST_URL || 'http://localhost:3000',
     TestIdamAddUserUrl: process.env.IDAM_ADD_USER_URL,

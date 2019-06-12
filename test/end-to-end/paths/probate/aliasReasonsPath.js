@@ -4,6 +4,8 @@
 const TestConfigurator = new (require('test/end-to-end/helpers/TestConfigurator'))();
 const {forEach, head} = require('lodash');
 const testConfig = require('test/config.js');
+const paymentType = testConfig.paymentType;
+const copies = testConfig.copies;
 
 let grabIds;
 let retries = -1;
@@ -22,7 +24,7 @@ AfterSuite(() => {
     TestConfigurator.getAfter();
 });
 
-Scenario(TestConfigurator.idamInUseText('Multiple Executors Journey - Main applicant: 1st stage of completing application'), function* (I) {
+Scenario(TestConfigurator.idamInUseText('Multiple Executors Journey - Main applicant: 1st stage of completing application'), async function (I) {
     retries += 1;
 
     if (retries >= 1) {
@@ -73,9 +75,9 @@ Scenario(TestConfigurator.idamInUseText('Multiple Executors Journey - Main appli
     I.selectInheritanceMethodPaper();
 
     if (TestConfigurator.getUseGovPay() === 'true') {
-        I.enterGrossAndNet('205', '600000', '300000');
+        I.enterGrossAndNet(paymentType.form, paymentType.pay.gross, paymentType.pay.net);
     } else {
-        I.enterGrossAndNet('205', '500', '400');
+        I.enterGrossAndNet(paymentType.form, paymentType.noPay.gross, paymentType.noPay.net);
     }
 
     I.selectDeceasedAlias('No');
@@ -130,20 +132,22 @@ Scenario(TestConfigurator.idamInUseText('Multiple Executors Journey - Main appli
 
     //Retrieve the email urls for additional executors
     I.amOnPage(testConfig.TestInviteIdListUrl);
-    grabIds = yield I.grabTextFrom('pre');
+    grabIds = await I.grabTextFrom('pre');
 }).retry(TestConfigurator.getRetryScenarios());
 
-Scenario(TestConfigurator.idamInUseText('Additional Executor(s) Agree to Statement of Truth'), function* (I) {
+Scenario(TestConfigurator.idamInUseText('Additional Executor(s) Agree to Statement of Truth'), async function (I) {
     const idList = JSON.parse(grabIds);
 
     for (let i=0; i < idList.ids.length; i++) {
         I.amOnPage(testConfig.TestInvitationUrl + '/' + idList.ids[i]);
         I.amOnPage(testConfig.TestE2EFrontendUrl + '/pin');
 
-        const grabPins = yield I.grabTextFrom('pre');
+        // eslint-disable-next-line no-await-in-loop
+        const grabPins = await I.grabTextFrom('pre');
         const pinList = JSON.parse(grabPins);
 
-        yield I.clickBrowserBackButton();
+        // eslint-disable-next-line no-await-in-loop
+        await I.clickBrowserBackButton();
 
         I.enterPinCode(pinList.pin.toString());
         I.seeCoApplicantStartPage();
@@ -158,7 +162,7 @@ Scenario(TestConfigurator.idamInUseText('Additional Executor(s) Agree to Stateme
     }
 });
 
-Scenario(TestConfigurator.idamInUseText('Continuation of Main applicant journey: final stage of application'), function* (I) {
+Scenario(TestConfigurator.idamInUseText('Continuation of Main applicant journey: final stage of application'), async function (I) {
     // IDAM
     I.amOnPage(testConfig.TestE2EFrontendUrl);
 
@@ -169,13 +173,13 @@ Scenario(TestConfigurator.idamInUseText('Continuation of Main applicant journey:
     I.selectATask();
 
     if (TestConfigurator.getUseGovPay() === 'true') {
-        I.enterUkCopies('5');
+        I.enterUkCopies(copies.pay.uk);
         I.selectOverseasAssets();
-        I.enterOverseasCopies('7');
+        I.enterOverseasCopies(copies.pay.overseas);
     } else {
-        I.enterUkCopies('0');
+        I.enterUkCopies(copies.noPay.uk);
         I.selectOverseasAssets();
-        I.enterOverseasCopies('0');
+        I.enterOverseasCopies(copies.noPay.overseas);
     }
 
     I.seeCopiesSummary();
@@ -184,9 +188,9 @@ Scenario(TestConfigurator.idamInUseText('Continuation of Main applicant journey:
     I.selectATask();
 
     if (TestConfigurator.getUseGovPay() === 'true') {
-        I.seePaymentBreakdownPage('5', '7', '300000');
+        I.seePaymentBreakdownPage(copies.pay.uk, copies.pay.overseas, paymentType.pay.net);
     } else {
-        I.seePaymentBreakdownPage('0', '0', '400');
+        I.seePaymentBreakdownPage(copies.noPay.uk, copies.noPay.overseas, paymentType.noPay.net);
     }
 
     if (TestConfigurator.getUseGovPay() === 'true') {
@@ -205,7 +209,7 @@ Scenario(TestConfigurator.idamInUseText('Continuation of Main applicant journey:
     // Sign back in and see thank you page
     I.amOnPage(testConfig.TestE2EFrontendUrl);
     I.authenticateWithIdamIfAvailable();
-    let ccdRef = yield I.grabTextFrom('//strong');
+    let ccdRef = await I.grabTextFrom('//strong');
     ccdRef = ccdRef[1].replace(/-/g, '');
     I.seeThankYouPage();
 

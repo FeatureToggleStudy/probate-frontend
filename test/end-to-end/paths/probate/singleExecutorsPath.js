@@ -22,6 +22,11 @@ After(() => {
 
 Scenario(TestConfigurator.idamInUseText('Single Executor Journey'), async function (I) {
 
+    I.amOnPage(testConfig.TestE2EFrontendUrl);
+
+    // IdAM
+    I.authenticateWithIdamIfAvailable();
+
     // Eligibility Task (pre IdAM)
     I.startApplication();
 
@@ -52,9 +57,6 @@ Scenario(TestConfigurator.idamInUseText('Single Executor Journey'), async functi
     I.selectMentallyCapable('Yes');
 
     I.startApply();
-
-    // IdAM
-    I.authenticateWithIdamIfAvailable();
 
     // Deceased Details
     I.selectATask();

@@ -6,15 +6,20 @@ const testConfig = require('test/config');
 
 module.exports = function (disableScript = false) {
     const I = this;
+    const documents = testConfig.TestDocumentsToUpload;
 
     I.seeCurrentUrlEquals(pageUnderTest.getUrl());
 
     if (disableScript) {
-        I.attachFile('#file', testConfig.TestDocumentToUpload);
-        I.waitForNavigationToComplete('input[value="Upload document"]');
+        for (let i = 0; i < documents.length; i++) {
+            I.attachFile('#file', documents[i]);
+            I.waitForNavigationToComplete('input[value="Upload document"]');
+        }
     } else {
-        I.attachFile('.dz-hidden-input', testConfig.TestDocumentToUpload);
-        I.waitForEnabled('#button', testConfig.TestDocumentToUpload);
+        for (let i = 0; i < documents.length; i++) {
+            I.attachFile('.dz-hidden-input', documents[i]);
+            I.waitForEnabled('#button', documents[i]);
+        }
     }
 
     I.waitForNavigationToComplete(`input[value="${commonContent.continue}"]`);
