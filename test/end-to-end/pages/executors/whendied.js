@@ -12,11 +12,8 @@ module.exports = function (executorNumber, diedBefore, firstRecord) {
         I.amOnLoadedPage(pageUnderTest.getUrl(parseInt(executorNumber) - 1));
     }
 
-    if (diedBefore) {
-        I.click('#diedbefore-optionYes');
-    } else {
-        I.click('#diedbefore-optionNo');
-    }
+    const answer = diedBefore ? 'Yes' : 'No';
+    I.click(`#diedbefore-option${answer}`);
 
     I.navByClick(commonContent.saveAndContinue);
 };

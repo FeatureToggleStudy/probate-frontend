@@ -12,11 +12,8 @@ module.exports = function (executorNumber, powerReserved, firstRecord) {
         I.amOnLoadedPage(pageUnderTest.getUrl(parseInt(executorNumber) - 1));
     }
 
-    if (powerReserved) {
-        I.click('#notApplyingReason-optionPowerReserved');
-    } else {
-        I.click('#notApplyingReason-optionRenunciated');
-    }
+    const answer = powerReserved ? 'PowerReserved' : 'Renunciated';
+    I.click(`#notApplyingReason-option${answer}`);
 
     I.navByClick(commonContent.saveAndContinue);
 };
