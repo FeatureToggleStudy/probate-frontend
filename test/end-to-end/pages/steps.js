@@ -1,122 +1,126 @@
 'use strict';
 
 const requireDirectory = require('require-directory');
-const steps = requireDirectory(module);
+const pages = requireDirectory(module);
+const steps = requireDirectory(module, '../steps');
 
 module.exports = function () {
     return actor({
         // Stop page
-        seeStopPage: steps.stoppage.stoppage,
+        seeStopPage: pages.stoppage.stoppage,
 
-        // Eligibility Task (pre IdAM)
-        startApplication: steps.screeners.starteligibility,
-        selectDeathCertificate: steps.screeners.deathcertificate,
-        selectDeceasedDomicile: steps.screeners.deceaseddomicile,
-        selectIhtCompleted: steps.screeners.ihtcompleted,
-        selectPersonWhoDiedLeftAWill: steps.screeners.willleft,
-        selectOriginalWill: steps.screeners.willoriginal,
-        selectApplicantIsExecutor: steps.screeners.applicantexecutor,
-        selectMentallyCapable: steps.screeners.mentalcapacity,
-        selectDiedAfterOctober2014: steps.screeners.diedafteroctober2014,
-        selectRelatedToDeceased: steps.screeners.relatedtodeceased,
-        selectOtherApplicants: steps.screeners.otherapplicants,
-        startApply: steps.screeners.startapply,
+        // Screener Pages
+        startScreeners: pages.screeners.starteligibility,
+        selectDeathCertificate: pages.screeners.deathcertificate,
+        selectDeceasedDomicile: pages.screeners.deceaseddomicile,
+        selectIhtCompleted: pages.screeners.ihtcompleted,
+        selectPersonWhoDiedLeftAWill: pages.screeners.willleft,
+        selectOriginalWill: pages.screeners.willoriginal,
+        selectApplicantIsExecutor: pages.screeners.applicantexecutor,
+        selectMentallyCapable: pages.screeners.mentalcapacity,
+        selectDiedAfterOctober2014: pages.screeners.diedafteroctober2014,
+        selectRelatedToDeceased: pages.screeners.relatedtodeceased,
+        selectOtherApplicants: pages.screeners.otherapplicants,
+        applyAfterScreeners: pages.screeners.startapply,
 
         // Sign In to IDAM
-        authenticateWithIdamIfAvailable: steps.IDAM.signIn,
+        signIn: pages.IDAM.signIn,
 
         // Start application
-        selectATask: steps.tasklist.tasklist,
+        selectATask: pages.tasklist.tasklist,
 
         // Deceased
-        enterDeceasedName: steps.deceased.name,
-        enterDeceasedDateOfBirth: steps.deceased.dob,
-        enterDeceasedDateOfDeath: steps.deceased.dod,
-        enterDeceasedAddress: steps.deceased.address,
-        selectDocumentsToUpload: steps.documentupload.documentupload,
-        selectInheritanceMethod: steps.iht.method,
-        enterGrossAndNet: steps.iht.paper,
-        enterIHTIdentifier: steps.iht.identifier,
-        enterEstateValue: steps.iht.value,
-        selectDeceasedAlias: steps.deceased.alias,
-        selectOtherNames: steps.deceased.otherNames,
-        selectDeceasedMarriedAfterDateOnWill: steps.deceased.married,
-        selectWillCodicils: steps.will.codicils,
-        selectWillNoOfCodicils: steps.will.codicilsnumber,
-        enterAnyChildren: steps.deceased.anychildren,
-        enterAnyOtherChildren: steps.deceased.anyotherchildren,
+        enterDeceasedName: pages.deceased.name,
+        enterDeceasedDateOfBirth: pages.deceased.dob,
+        enterDeceasedDateOfDeath: pages.deceased.dod,
+        enterDeceasedAddress: pages.deceased.address,
+        selectDocumentsToUpload: pages.documentupload.documentupload,
+        selectInheritanceMethod: pages.iht.method,
+        enterGrossAndNet: pages.iht.paper,
+        enterIHTIdentifier: pages.iht.identifier,
+        enterEstateValue: pages.iht.value,
+        selectDeceasedAlias: pages.deceased.alias,
+        selectOtherNames: pages.deceased.otherNames,
+        selectDeceasedMarriedAfterDateOnWill: pages.deceased.married,
+        selectWillCodicils: pages.will.codicils,
+        selectWillNoOfCodicils: pages.will.codicilsnumber,
+        enterAnyChildren: pages.deceased.anychildren,
+        enterAnyOtherChildren: pages.deceased.anyotherchildren,
 
         // Executors
-        enterApplicantName: steps.applicant.name,
-        selectNameAsOnTheWill: steps.applicant.nameasonwill,
-        enterApplicantAlias: steps.applicant.alias,
-        enterApplicantAliasReason: steps.applicant.aliasreason,
-        enterApplicantPhone: steps.applicant.phone,
-        enterAddressManually: steps.applicant.address,
-        enterTotalExecutors: steps.executors.number,
+        enterApplicantName: pages.applicant.name,
+        selectNameAsOnTheWill: pages.applicant.nameasonwill,
+        enterApplicantAlias: pages.applicant.alias,
+        enterApplicantAliasReason: pages.applicant.aliasreason,
+        enterApplicantPhone: pages.applicant.phone,
+        enterAddressManually: pages.applicant.address,
+        enterTotalExecutors: pages.executors.number,
 
         // Multiple Executors
-        enterExecutorNames: steps.executors.names,
-        selectExecutorsAllAlive: steps.executors.allalive,
-        selectExecutorsWhoDied: steps.executors.whodied,
-        selectExecutorsWhenDied: steps.executors.whendied,
-        selectExecutorsApplying: steps.executors.applying,
-        selectExecutorsDealingWithEstate: steps.executors.dealingwithestate,
-        selectExecutorsWithDifferentNameOnWill: steps.executors.alias,
-        selectWhichExecutorsWithDifferentNameOnWill: steps.executors.othername,
-        enterExecutorCurrentName: steps.executors.currentname,
-        enterExecutorCurrentNameReason: steps.executors.currentnamereason,
-        enterExecutorContactDetails: steps.executors.contactdetails,
-        enterExecutorManualAddress: steps.executors.address,
-        selectExecutorRoles: steps.executors.roles,
-        selectHasExecutorBeenNotified: steps.executors.notified,
+        enterExecutorNames: pages.executors.names,
+        selectExecutorsAllAlive: pages.executors.allalive,
+        selectExecutorsWhoDied: pages.executors.whodied,
+        selectExecutorsWhenDied: pages.executors.whendied,
+        selectExecutorsApplying: pages.executors.applying,
+        selectExecutorsDealingWithEstate: pages.executors.dealingwithestate,
+        selectExecutorsWithDifferentNameOnWill: pages.executors.alias,
+        selectWhichExecutorsWithDifferentNameOnWill: pages.executors.othername,
+        enterExecutorCurrentName: pages.executors.currentname,
+        enterExecutorCurrentNameReason: pages.executors.currentnamereason,
+        enterExecutorContactDetails: pages.executors.contactdetails,
+        enterExecutorManualAddress: pages.executors.address,
+        selectExecutorRoles: pages.executors.roles,
+        selectHasExecutorBeenNotified: pages.executors.notified,
 
         // Summary page
-        seeSummaryPage: steps.summary.summary,
-        acceptDeclaration: steps.declaration.declaration,
+        seeSummaryPage: pages.summary.summary,
+        acceptDeclaration: pages.declaration.declaration,
 
         // Notify additional executors
-        notifyAdditionalExecutors: steps.executors.invite,
+        notifyAdditionalExecutors: pages.executors.invite,
 
         // Pin page for additional executor
-        enterPinCode: steps.pin.signin,
+        enterPinCode: pages.pin.signin,
 
         // Additional executors Agree/Disagree with Statement of Truth
-        seeCoApplicantStartPage: steps.coapplicant.startPage,
-        agreeDisagreeDeclaration: steps.coapplicant.declaration,
-        seeAgreePage: steps.coapplicant.agree,
+        seeCoApplicantStartPage: pages.coapplicant.startPage,
+        agreeDisagreeDeclaration: pages.coapplicant.declaration,
+        seeAgreePage: pages.coapplicant.agree,
 
         // Asset pages
-        selectOverseasAssets: steps.assets.overseas,
+        selectOverseasAssets: pages.assets.overseas,
 
         // Copies pages
-        enterUkCopies: steps.copies.uk,
-        enterOverseasCopies: steps.copies.overseas,
-        seeCopiesSummary: steps.copies.summary,
+        enterUkCopies: pages.copies.uk,
+        enterOverseasCopies: pages.copies.overseas,
+        seeCopiesSummary: pages.copies.summary,
 
         // Payment
-        seePaymentBreakdownPage: steps.payment.paymentbreakdown,
-        seeGovUkPaymentPage: steps.payment.govukpayment,
-        seeGovUkConfirmPage: steps.payment.govukconfirmpayment,
-        seePaymentStatusPage: steps.payment.paymentstatus,
+        seePaymentBreakdownPage: pages.payment.paymentbreakdown,
+        seeGovUkPaymentPage: pages.payment.govukpayment,
+        seeGovUkConfirmPage: pages.payment.govukconfirmpayment,
+        seePaymentStatusPage: pages.payment.paymentstatus,
 
         // Documents
-        seeDocumentsPage: steps.documents.documents,
+        seeDocumentsPage: pages.documents.documents,
 
         // Thank You
-        seeThankYouPage: steps.thankyou.thankyou,
+        seeThankYouPage: pages.thankyou.thankyou,
 
         // Intestacy
-        enterDeceasedDetails: steps.deceased.details,
-        selectAssetsOutsideEnglandWales: steps.deceased.assetsoutsideenglandwales,
-        enterValueAssetsOutsideEnglandWales: steps.deceased.valueassetsoutsideenglandwales,
-        selectDeceasedMaritalStatus: steps.deceased.maritalstatus,
-        selectDeceasedDivorcePlace: steps.deceased.divorceplace,
-        selectRelationshipToDeceased: steps.applicant.relationshiptodeceased,
-        selectSpouseNotApplyingReason: steps.applicant.spousenotapplyingreason,
+        enterDeceasedDetails: pages.deceased.details,
+        selectAssetsOutsideEnglandWales: pages.deceased.assetsoutsideenglandwales,
+        enterValueAssetsOutsideEnglandWales: pages.deceased.valueassetsoutsideenglandwales,
+        selectDeceasedMaritalStatus: pages.deceased.maritalstatus,
+        selectDeceasedDivorcePlace: pages.deceased.divorceplace,
+        selectRelationshipToDeceased: pages.applicant.relationshiptodeceased,
+        selectSpouseNotApplyingReason: pages.applicant.spousenotapplyingreason,
 
         // Tasks
-        completeEligibilityTask: steps.tasks.tasks.completeEligibilityTask,
-        completeExecutorsTask: steps.tasks.tasks.completeExecutorsTask
+        completeEligibilityTask: pages.tasks.tasks.completeEligibilityTask,
+        completeExecutorsTask: pages.tasks.tasks.completeExecutorsTask,
+
+        // steps
+        startApplicationProbate: steps.startApplication
     });
 };

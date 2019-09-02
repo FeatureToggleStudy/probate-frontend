@@ -2,7 +2,8 @@
 
 const TestConfigurator = new (require('test/end-to-end/helpers/TestConfigurator'))();
 
-Feature('Single Executor flow').retry(TestConfigurator.getRetryFeatures());
+Feature('End-to-end application for grant of probate');
+// .retry(TestConfigurator.getRetryFeatures());
 
 // eslint complains that the Before/After are not used but they are by codeceptjs
 // so we have to tell eslint to not validate these
@@ -11,6 +12,8 @@ Before(() => {
     TestConfigurator.getBefore();
 });
 
-Scenario(TestConfigurator.idamInUseText('Single Executor Journey'), function (I) {
+Scenario(TestConfigurator.idamInUseText('Single Applicant Journey'), function (I) {
+    const screenersToggle = true;
+    I.startApplicationProbate(screenersToggle);
 
 });

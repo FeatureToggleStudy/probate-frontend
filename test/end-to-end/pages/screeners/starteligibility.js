@@ -3,8 +3,9 @@
 /* eslint-disable no-undef */
 const pageUnderTest = require('app/steps/ui/screeners/starteligibility');
 const testConfig = require('test/config');
+const commonLocators = require('test/end-to-end/resources/common');
 
-module.exports = function (checkCookieBannerExists) {
+module.exports = function (checkCookieBannerExists=false) {
     const I = this;
 
     I.amOnLoadedPage(pageUnderTest.getUrl());
@@ -13,5 +14,5 @@ module.exports = function (checkCookieBannerExists) {
         I.waitForElement('div#global-cookie-message', testConfig.TestWaitForElementToAppear);
     }
 
-    I.navByClick('.button');
+    I.navByClick(commonLocators.govUkButton);
 };
