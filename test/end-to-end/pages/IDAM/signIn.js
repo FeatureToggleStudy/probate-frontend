@@ -1,5 +1,6 @@
 'use strict';
 
+const commonLocators = require('test/end-to-end/resources/common');
 const testConfig = require('test/config.js');
 const useIdam = testConfig.TestUseIdam;
 
@@ -15,6 +16,6 @@ module.exports = function (screenersToggle = false) {
         I.fillField('username', process.env.testCitizenEmail);
         I.fillField('password', process.env.testCitizenPassword);
 
-        I.click('Sign in');
+        I.navByClick(commonLocators.button);
     }
 };

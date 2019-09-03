@@ -1,3 +1,4 @@
 {
-    "govUkButton": ".govuk-button"
+    "govUkButton": ".govuk-button",
+    "button": ".button"
 }
