@@ -8,7 +8,7 @@ module.exports = function (screenersToggle = false) {
     if (useIdam === 'true') {
         const I = this;
 
-        if (screenersToggle) {
+        if (!screenersToggle) {
             I.amOnPage('/');
         }
 

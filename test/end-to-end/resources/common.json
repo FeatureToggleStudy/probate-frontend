@@ -1,4 +1,6 @@
 {
     "govUkButton": ".govuk-button",
+    "govUkLink": ".govuk-link",
+    "manualAddressLink": ".govuk-details__summary-text",
     "button": ".button"
 }

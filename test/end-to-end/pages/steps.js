@@ -121,6 +121,7 @@ module.exports = function () {
         completeExecutorsTask: pages.tasks.tasks.completeExecutorsTask,
 
         // steps
-        startApplicationProbate: steps.startApplication
+        startApplicationProbate: steps.startApplication,
+        startDeceasedDetails: steps.deceasedDetails
     });
 };

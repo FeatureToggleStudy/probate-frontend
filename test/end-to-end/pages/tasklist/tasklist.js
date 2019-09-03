@@ -1,13 +1,14 @@
 'use strict';
 
-const content = require('app/resources/en/translation/tasklist');
+const tasklistContent = require('app/resources/en/translation/tasklist');
 const pageUnderTest = require('app/steps/ui/tasklist');
 const testConfig = require('test/config.js');
+const commonLocators = require('test/end-to-end/resources/common');
 
 module.exports = function () {
     const I = this;
-    I.waitForText(content.introduction, testConfig.TestWaitForTextToAppear);
+    I.waitForText(tasklistContent.introduction, testConfig.TestWaitForTextToAppear);
     I.amOnLoadedPage(pageUnderTest.getUrl());
 
-    I.click('.button');
+    I.click(commonLocators.govUkButton);
 };

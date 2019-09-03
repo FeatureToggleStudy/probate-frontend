@@ -1,15 +1,14 @@
 'use strict';
 
-const commonContent = require('app/resources/en/translation/common');
+const commonLocators = require('test/end-to-end/resources/common');
 const pageUnderTest = require('app/steps/ui/deceased/dod');
 
-module.exports = function (day, month, year) {
+module.exports = function () {
     const I = this;
     I.amOnLoadedPage(pageUnderTest.getUrl());
 
-    I.fillField('#dod_day', day);
-    I.fillField('#dod_month', month);
-    I.fillField('#dod_year', year);
-
-    I.navByClick(commonContent.saveAndContinue);
+    I.fillField('#dod-day', '02');
+    I.fillField('#dod-month', '01');
+    I.fillField('#dod-year', '2000');
+    I.navByClick(commonLocators.govUkButton);
 };

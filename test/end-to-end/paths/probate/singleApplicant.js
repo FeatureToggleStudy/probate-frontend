@@ -12,8 +12,14 @@ Before(() => {
     TestConfigurator.getBefore();
 });
 
-Scenario(TestConfigurator.idamInUseText('Single Applicant Journey'), function (I) {
+Scenario(TestConfigurator.idamInUseText('Single Applicant Journey with Screeners Questions'), function (I) {
     const screenersToggle = true;
     I.startApplicationProbate(screenersToggle);
+});
 
+Scenario.only(TestConfigurator.idamInUseText('Single Applicant Journey without Screeners Questions'), function (I) {
+    const screenersToggle = false;
+
+    I.startApplicationProbate(screenersToggle);
+    I.startDeceasedDetails();
 });

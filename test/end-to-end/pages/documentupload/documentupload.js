@@ -1,10 +1,10 @@
 'use strict';
 
-const commonContent = require('app/resources/en/translation/common');
+const commonLocators = require('test/end-to-end/resources/common');
 const pageUnderTest = require('app/steps/ui/documentupload');
 //const testConfig = require('test/config');
 
-module.exports = function (uploadDocument) {
+module.exports = function (uploadDocument=false) {
     const I = this;
 
     I.amOnLoadedPage(pageUnderTest.getUrl());
@@ -15,5 +15,5 @@ module.exports = function (uploadDocument) {
         I.uploadDocumentIfNotMicrosoftEdge();
     }
 
-    I.navByClick(commonContent.continue);
+    I.navByClick(commonLocators.govUkButton);
 };
