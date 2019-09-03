@@ -8,35 +8,37 @@ module.exports = function (screenersToggle) {
     const originalWillStopPage = 'notOriginal';
     const applicantIsExecutorStopPage = 'notExecutor';
     const mentalCapacityStopPage = 'mentalCapacity';
+    const yes = '';
+    const no = '-2';
 
     if (screenersToggle) {
         I.startScreeners();
 
-        I.selectDeathCertificate('No');
+        I.selectDeathCertificate(no);
         I.seeStopPage(deathCertificateStopPage);
-        I.selectDeathCertificate('Yes');
+        I.selectDeathCertificate(yes);
 
-        I.selectDeceasedDomicile('No');
+        I.selectDeceasedDomicile(no);
         I.seeStopPage(englandOrWalesStopPage);
-        I.selectDeceasedDomicile('Yes');
+        I.selectDeceasedDomicile(yes);
 
-        I.selectIhtCompleted('No');
+        I.selectIhtCompleted(no);
         I.seeStopPage(ihtCompletedStopPage);
-        I.selectIhtCompleted('Yes');
+        I.selectIhtCompleted(yes);
 
-        I.selectPersonWhoDiedLeftAWill('Yes');
+        I.selectPersonWhoDiedLeftAWill(yes);
 
-        I.selectOriginalWill('No');
+        I.selectOriginalWill(no);
         I.seeStopPage(originalWillStopPage);
-        I.selectOriginalWill('Yes');
+        I.selectOriginalWill(yes);
 
-        I.selectApplicantIsExecutor('No');
+        I.selectApplicantIsExecutor(no);
         I.seeStopPage(applicantIsExecutorStopPage);
-        I.selectApplicantIsExecutor('Yes');
+        I.selectApplicantIsExecutor(yes);
 
-        I.selectMentallyCapable('No');
+        I.selectMentallyCapable(no);
         I.seeStopPage(mentalCapacityStopPage);
-        I.selectMentallyCapable('Yes');
+        I.selectMentallyCapable(yes);
 
         I.applyAfterScreeners();
     }
