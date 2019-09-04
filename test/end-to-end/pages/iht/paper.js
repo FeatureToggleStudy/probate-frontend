@@ -1,17 +1,14 @@
 'use strict';
 
 const pageUnderTest = require('app/steps/ui/iht/paper');
-const commonContent = require('app/resources/en/translation/common');
+const commonLocators = require('test/end-to-end/resources/common');
 
-module.exports = function (formName, grossAmount, netAmount) {
+module.exports = function () {
     const I = this;
 
     I.amOnLoadedPage(pageUnderTest.getUrl());
-
-    I.click(`#paperIHT${formName}`);
-
-    I.fillField(`#grossValueFieldIHT${formName}`, grossAmount);
-    I.fillField(`#netValueFieldIHT${formName}`, netAmount);
-
-    I.navByClick(commonContent.saveAndContinue);
+    I.click('#form');
+    I.fillField('#grossValueFieldIHT205', '250000');
+    I.fillField('#netValueFieldIHT205', '240000');
+    I.navByClick(commonLocators.govUkButton);
 };

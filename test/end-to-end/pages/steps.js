@@ -36,14 +36,14 @@ module.exports = function () {
         enterDeceasedAddress: pages.deceased.address,
         selectDocumentsToUpload: pages.documentupload.documentupload,
         selectInheritanceMethod: pages.iht.method,
-        enterGrossAndNet: pages.iht.paper,
+        enterIHTPaperValues: pages.iht.paper,
         enterIHTIdentifier: pages.iht.identifier,
-        enterEstateValue: pages.iht.value,
+        enterIHTOnlineValues: pages.iht.value,
         selectDeceasedAlias: pages.deceased.alias,
-        selectOtherNames: pages.deceased.otherNames,
-        selectDeceasedMarriedAfterDateOnWill: pages.deceased.married,
-        selectWillCodicils: pages.will.codicils,
-        selectWillNoOfCodicils: pages.will.codicilsnumber,
+        enterDeceasedAliases: pages.deceased.otherNames,
+        selectDeceasedMarried: pages.deceased.married,
+        selectCodicils: pages.will.codicils,
+        selectNoOfCodicils: pages.will.codicilsnumber,
         enterAnyChildren: pages.deceased.anychildren,
         enterAnyOtherChildren: pages.deceased.anyotherchildren,
 
@@ -122,6 +122,7 @@ module.exports = function () {
 
         // steps
         startApplicationProbate: steps.startApplication,
-        startDeceasedDetails: steps.deceasedDetails
+        completeDeceasedDetails: steps.deceasedDetails,
+        completeExecutorDetails: steps.executorDetails
     });
 };

@@ -1,12 +1,12 @@
 'use strict';
 
-const commonContent = require('app/resources/en/translation/common');
+const commonLocators = require('test/end-to-end/resources/common');
 const pageUnderTest = require('app/steps/ui/deceased/married');
 
-module.exports = function (answer) {
+module.exports = function () {
     const I = this;
     I.amOnLoadedPage(pageUnderTest.getUrl());
-    I.click(`#married-option${answer}`);
 
-    I.navByClick(commonContent.saveAndContinue);
+    I.click('#married');
+    I.navByClick(commonLocators.govUkButton);
 };
