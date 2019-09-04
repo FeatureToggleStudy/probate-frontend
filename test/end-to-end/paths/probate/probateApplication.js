@@ -12,13 +12,13 @@ Before(() => {
     TestConfigurator.getBefore();
 });
 
-Scenario(TestConfigurator.idamInUseText('Single Applicant Journey with Screener Questions'), function (I) {
+Scenario(TestConfigurator.idamInUseText('Single applicant journey'), function (I) {
     const screenersToggle = true;
     const paper = true;
     const deceasedAlias = false;
     const codicils = false;
     const applicantAlias = false;
-    const noOfExecutors = 1;
+    const noOfExecutors = '1';
     const assetsOverseas = false;
 
     I.startApplicationProbate(screenersToggle);
@@ -29,19 +29,17 @@ Scenario(TestConfigurator.idamInUseText('Single Applicant Journey with Screener 
     I.completePayment();
 });
 
-Scenario(TestConfigurator.idamInUseText('Single Applicant Journey without Screener Questions'), function (I) {
+Scenario.only(TestConfigurator.idamInUseText('Main applicant journey with 6 executors'), function (I) {
     const screenersToggle = false;
     const paper = true;
     const deceasedAlias = false;
     const codicils = false;
     const applicantAlias = false;
-    const noOfExecutors = 1;
-    const assetsOverseas = false;
+    const noOfExecutors = '7';
+    const whoDied = ['1', '6'];
 
     I.startApplicationProbate(screenersToggle);
     I.completeDeceasedDetails(paper, deceasedAlias, codicils);
     I.completeApplicantDetails(applicantAlias, noOfExecutors);
-    I.completeLegalDeclaration();
-    I.completeCopiesDetails(assetsOverseas);
-    I.completePayment();
+    I.completeExecutorDetails(noOfExecutors, whoDied);
 });

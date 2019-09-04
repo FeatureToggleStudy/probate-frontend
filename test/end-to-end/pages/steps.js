@@ -124,6 +124,7 @@ module.exports = function () {
         startApplicationProbate: steps.startApplication,
         completeDeceasedDetails: steps.deceasedDetails,
         completeApplicantDetails: steps.applicantDetails,
+        completeExecutorDetails: steps.executorDetails,
         completeLegalDeclaration: steps.legalDeclaration,
         completeCopiesDetails: steps.copies,
         completePayment: steps.payment

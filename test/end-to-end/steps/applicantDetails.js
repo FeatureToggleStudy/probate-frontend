@@ -1,13 +1,14 @@
 'use strict';
 
-const convertToLocator = require('../../util/e2eUtils.js');
+const e2eUtils = require('../../util/e2eUtils.js');
+const convertToRadioLocator = e2eUtils.convertToRadioLocator;
 
 module.exports = function (alias, numberOfExecutors) {
     const I = this;
 
     I.selectATask();
     I.enterApplicantName();
-    I.selectApplicantNameAsOnWill(convertToLocator(!alias));
+    I.selectApplicantNameAsOnWill(convertToRadioLocator(!alias));
     if (alias) {
         I.enterApplicantAlias();
         I.enterApplicantAliasReason();

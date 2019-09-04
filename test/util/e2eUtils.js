@@ -1,7 +1,16 @@
 'use strict';
 
-function convertToLocator(option) {
+function convertToRadioLocator(option) {
     return option ? '' : '-2';
 }
 
-module.exports = convertToLocator;
+function convertToCheckboxLocator(options) {
+    options.map((option) => {
+        return option === '1' ? '' : '-'+option;
+    });
+}
+
+module.exports = {
+    convertToRadioLocator,
+    convertToCheckboxLocator
+}
