@@ -96,10 +96,10 @@ module.exports = function () {
         seeCopiesSummary: pages.copies.summary,
 
         // Payment
-        seePaymentBreakdownPage: pages.payment.paymentbreakdown,
-        seeGovUkPaymentPage: pages.payment.govukpayment,
-        seeGovUkConfirmPage: pages.payment.govukconfirmpayment,
-        seePaymentStatusPage: pages.payment.paymentstatus,
+        seePaymentBreakdown: pages.payment.paymentbreakdown,
+        enterGovUkPayment: pages.payment.govukpayment,
+        seeGovUkConfirm: pages.payment.govukconfirmpayment,
+        seePaymentStatus: pages.payment.paymentstatus,
 
         // Documents
         seeDocumentsPage: pages.documents.documents,
@@ -123,6 +123,9 @@ module.exports = function () {
         // steps
         startApplicationProbate: steps.startApplication,
         completeDeceasedDetails: steps.deceasedDetails,
-        completeApplicantDetails: steps.applicantDetails
+        completeApplicantDetails: steps.applicantDetails,
+        completeLegalDeclaration: steps.legalDeclaration,
+        completeCopiesDetails: steps.copies,
+        completePayment: steps.payment
     });
 };

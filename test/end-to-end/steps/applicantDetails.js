@@ -1,6 +1,8 @@
 'use strict';
 
-module.exports = function (alias) {
+const convertToLocator = require('../../util/e2eUtils.js');
+
+module.exports = function (alias, numberOfExecutors) {
     const I = this;
 
     I.selectATask();
@@ -12,8 +14,5 @@ module.exports = function (alias) {
     }
     I.enterApplicantPhone();
     I.enterApplicantAddress();
+    I.enterTotalExecutors(numberOfExecutors);
 };
-
-function convertToLocator(option) {
-    return option ? '' : '-2';
-}

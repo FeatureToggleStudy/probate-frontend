@@ -1,16 +1,13 @@
 'use strict';
 
-const commonContent = require('app/resources/en/translation/common');
+const commonLocators = require('test/end-to-end/resources/common');
 const pageUnderTest = require('app/steps/ui/declaration');
 
 module.exports = function () {
     const I = this;
-
     I.amOnLoadedPage(pageUnderTest.getUrl());
 
     I.downloadPdfIfNotIE11('#declarationPdfHref');
-
     I.click('#declarationCheckbox');
-
-    I.navByClick(commonContent.saveAndContinue);
+    I.navByClick(commonLocators.govUkButton);
 };

@@ -8,6 +8,5 @@ module.exports = function () {
     I.waitForText('Payment summary', testConfig.TestWaitForTextToAppear);
     I.seeInCurrentUrl(testConfig.TestGovUkConfirmPaymentUrl);
     I.waitForElement('#confirm', testConfig.TestWaitForElementToAppear);
-
     I.click('#confirm');
 };

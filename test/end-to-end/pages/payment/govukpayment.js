@@ -4,9 +4,7 @@ const testConfig = require('test/config');
 
 module.exports = function () {
     const I = this;
-
     I.retry(testConfig.TestRetrySteps).waitForText('Enter card details', testConfig.TestWaitForTextToAppear);
-
     I.seeInCurrentUrl(testConfig.TestGovUkCardPaymentsUrl);
 
     I.fillField('#card-no', testConfig.govPayTestCardNos.validCardNo);
@@ -19,6 +17,5 @@ module.exports = function () {
     I.fillField('#address-postcode', testConfig.govPayTestCardDetails.addressPostcode);
     I.wait(3);
     I.fillField('#email', testConfig.TestEnvEmailAddress);
-
     I.click('#submit-card-details');
 };

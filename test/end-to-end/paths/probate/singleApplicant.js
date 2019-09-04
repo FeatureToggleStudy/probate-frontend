@@ -12,18 +12,36 @@ Before(() => {
     TestConfigurator.getBefore();
 });
 
-Scenario(TestConfigurator.idamInUseText('Single Applicant Journey with Screeners Questions'), function (I) {
+Scenario(TestConfigurator.idamInUseText('Single Applicant Journey with Screener Questions'), function (I) {
     const screenersToggle = true;
+    const paper = true;
+    const deceasedAlias = false;
+    const codicils = false;
+    const applicantAlias = false;
+    const noOfExecutors = 1;
+    const assetsOverseas = false;
+
     I.startApplicationProbate(screenersToggle);
+    I.completeDeceasedDetails(paper, deceasedAlias, codicils);
+    I.completeApplicantDetails(applicantAlias, noOfExecutors);
+    I.completeLegalDeclaration();
+    I.completeCopiesDetails(assetsOverseas);
+    I.completePayment();
 });
 
-Scenario.only(TestConfigurator.idamInUseText('Single Applicant Journey without Screeners Questions'), function (I) {
+Scenario(TestConfigurator.idamInUseText('Single Applicant Journey without Screener Questions'), function (I) {
     const screenersToggle = false;
     const paper = true;
     const deceasedAlias = false;
-    const codicils = true;
+    const codicils = false;
     const applicantAlias = false;
+    const noOfExecutors = 1;
+    const assetsOverseas = false;
+
     I.startApplicationProbate(screenersToggle);
     I.completeDeceasedDetails(paper, deceasedAlias, codicils);
-    I.completeApplicantDetails(applicantAlias);
+    I.completeApplicantDetails(applicantAlias, noOfExecutors);
+    I.completeLegalDeclaration();
+    I.completeCopiesDetails(assetsOverseas);
+    I.completePayment();
 });

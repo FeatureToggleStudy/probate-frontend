@@ -1,5 +1,7 @@
 'use strict';
 
+const convertToLocator = require('../../util/e2eUtils.js');
+
 module.exports = function (paper, alias, codicils) {
     const I = this;
 
@@ -26,7 +28,3 @@ module.exports = function (paper, alias, codicils) {
         I.selectNoOfCodicils();
     }
 };
-
-function convertToLocator(option) {
-    return option ? '' : '-2';
-}

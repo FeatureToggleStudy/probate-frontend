@@ -5,10 +5,8 @@ const pageUnderTest = require('app/steps/ui/executors/number');
 
 module.exports = function (totalExecutors) {
     const I = this;
-
     I.amOnLoadedPage(pageUnderTest.getUrl());
 
     I.fillField('#executorsNumber', totalExecutors);
-
     I.navByClick(commonContent.saveAndContinue);
 };

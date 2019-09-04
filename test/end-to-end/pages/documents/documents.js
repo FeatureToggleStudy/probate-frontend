@@ -1,12 +1,11 @@
 'use strict';
 
-const commonContent = require('app/resources/en/translation/common');
+const commonLocators = require('test/end-to-end/resources/common');
 const documentsContent = require('app/resources/en/translation/documents');
 const pageUnderTest = require('app/steps/ui/documents');
 
 module.exports = function (paperIhtFormUsed, deathCertUploaded, spouseRenouncing) {
     const I = this;
-
     I.amOnLoadedPage(pageUnderTest.getUrl());
 
     if (paperIhtFormUsed) {
@@ -21,6 +20,5 @@ module.exports = function (paperIhtFormUsed, deathCertUploaded, spouseRenouncing
     }
 
     I.downloadPdfIfNotIE11('#coverSheetPdfHref');
-
-    I.navByClick(commonContent.continue);
+    I.navByClick(commonLocators.govUkButton);
 };
