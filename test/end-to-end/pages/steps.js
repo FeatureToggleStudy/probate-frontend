@@ -49,11 +49,11 @@ module.exports = function () {
 
         // Executors
         enterApplicantName: pages.applicant.name,
-        selectNameAsOnTheWill: pages.applicant.nameasonwill,
+        selectApplicantNameAsOnWill: pages.applicant.nameasonwill,
         enterApplicantAlias: pages.applicant.alias,
         enterApplicantAliasReason: pages.applicant.aliasreason,
         enterApplicantPhone: pages.applicant.phone,
-        enterAddressManually: pages.applicant.address,
+        enterApplicantAddress: pages.applicant.address,
         enterTotalExecutors: pages.executors.number,
 
         // Multiple Executors
@@ -123,6 +123,6 @@ module.exports = function () {
         // steps
         startApplicationProbate: steps.startApplication,
         completeDeceasedDetails: steps.deceasedDetails,
-        completeExecutorDetails: steps.executorDetails
+        completeApplicantDetails: steps.applicantDetails
     });
 };

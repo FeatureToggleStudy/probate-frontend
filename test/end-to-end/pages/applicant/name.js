@@ -1,13 +1,12 @@
 'use strict';
 
-const commonContent = require('app/resources/en/translation/common');
+const commonLocators = require('test/end-to-end/resources/common');
 const pageUnderTest = require('app/steps/ui/applicant/name');
 
-module.exports = function (firstname, lastname) {
+module.exports = function () {
     const I = this;
     I.amOnLoadedPage(pageUnderTest.getUrl());
-    I.fillField('#firstName', firstname);
-    I.fillField('#lastName', lastname);
-
-    I.navByClick(commonContent.saveAndContinue);
+    I.fillField('#firstName', 'Applicant_fn');
+    I.fillField('#lastName', 'Applicant_ln');
+    I.navByClick(commonLocators.govUkButton);
 };

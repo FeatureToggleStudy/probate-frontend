@@ -20,9 +20,10 @@ Scenario(TestConfigurator.idamInUseText('Single Applicant Journey with Screeners
 Scenario.only(TestConfigurator.idamInUseText('Single Applicant Journey without Screeners Questions'), function (I) {
     const screenersToggle = false;
     const paper = true;
-    const alias = false;
+    const deceasedAlias = false;
     const codicils = true;
+    const applicantAlias = false;
     I.startApplicationProbate(screenersToggle);
-    I.completeDeceasedDetails(paper, alias, codicils);
-    I.completeExecutorDetails();
+    I.completeDeceasedDetails(paper, deceasedAlias, codicils);
+    I.completeApplicantDetails(applicantAlias);
 });
