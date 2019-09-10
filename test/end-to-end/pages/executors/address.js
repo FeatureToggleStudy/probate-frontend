@@ -1,14 +1,14 @@
 'use strict';
 
+const commonLocators = require('test/end-to-end/resources/common');
 const commonContent = require('app/resources/en/translation/common');
 const pageUnderTest = require('app/steps/ui/executors/address');
 
 module.exports = function (executorNumber) {
     const I = this;
-
-    I.amOnLoadedPage(pageUnderTest.getUrl(parseInt(executorNumber)-1));
+    I.amOnLoadedPage(pageUnderTest.getUrl(executorNumber));
     I.waitForInvisible('#addressLine1');
-    I.click('.summary');
+    I.click(commonLocators.manualAddressLink);
     I.waitForVisible('#addressLine1');
 
     I.fillField('#addressLine1', 'additional executor test address line 1');

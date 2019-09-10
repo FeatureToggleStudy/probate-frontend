@@ -1,6 +1,6 @@
 'use strict';
 
-const commonContent = require('app/resources/en/translation/common');
+const commonLocators = require('test/end-to-end/resources/common');
 const pageUnderTest = require('app/steps/ui/executors/contactdetails');
 const testConfig = require('test/config');
 
@@ -10,11 +10,11 @@ module.exports = function (executorNumber, firstRecord) {
     if (firstRecord) {
         I.amOnLoadedPage(pageUnderTest.getUrl());
     } else {
-        I.amOnLoadedPage(pageUnderTest.getUrl(parseInt(executorNumber) - 1));
+        I.amOnLoadedPage(pageUnderTest.getUrl(executorNumber));
     }
 
     I.fillField('#email', testConfig.TestEnvEmailAddress);
     I.fillField('#mobile', testConfig.TestEnvMobileNumber);
 
-    I.navByClick(commonContent.saveAndContinue);
+    I.navByClick(commonLocators.govUkButton);
 };

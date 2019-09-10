@@ -17,8 +17,17 @@ function convertExecAliasToCheckboxLocator(execsApplying, execsWithAliases) {
     return convertToCheckboxLocator(indexes);
 }
 
+function calculateRoles(noOfExecs, whoDied, execsApplying) {
+    const execTotalArray = [...Array(noOfExecs).keys()];
+    execTotalArray.shift();
+
+    const noRolesArray = execsApplying.concat(whoDied);
+    return execTotalArray.filter(x => !noRolesArray.includes(x));
+}
+
 module.exports = {
     convertToRadioLocator,
     convertToCheckboxLocator,
-    convertExecAliasToCheckboxLocator
+    convertExecAliasToCheckboxLocator,
+    calculateRoles
 };

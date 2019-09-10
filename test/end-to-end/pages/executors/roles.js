@@ -1,19 +1,18 @@
 'use strict';
 
-const commonContent = require('app/resources/en/translation/common');
+const commonLocators = require('test/end-to-end/resources/common');
 const pageUnderTest = require('app/steps/ui/executors/roles');
 
-module.exports = function (executorNumber, powerReserved, firstRecord) {
+module.exports = function (executorNumber, answer, firstRecord) {
     const I = this;
 
     if (firstRecord) {
         I.amOnLoadedPage(pageUnderTest.getUrl());
     } else {
-        I.amOnLoadedPage(pageUnderTest.getUrl(parseInt(executorNumber) - 1));
+        I.amOnLoadedPage(pageUnderTest.getUrl(executorNumber));
     }
 
-    const answer = powerReserved ? 'PowerReserved' : 'Renunciated';
-    I.click(`#notApplyingReason-option${answer}`);
+    I.click(`#notApplyingReason${answer}`);
 
-    I.navByClick(commonContent.saveAndContinue);
+    I.navByClick(commonLocators.govUkButton);
 };
