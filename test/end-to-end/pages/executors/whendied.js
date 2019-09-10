@@ -1,6 +1,8 @@
 'use strict';
 
-const commonContent = require('app/resources/en/translation/common');
+const e2eUtils = require('../../../util/e2eUtils.js');
+const convertToRadioLocator = e2eUtils.convertToRadioLocator;
+const commonLocators = require('test/end-to-end/resources/common');
 const pageUnderTest = require('app/steps/ui/executors/whendied');
 
 module.exports = function (executorNumber, diedBefore, firstRecord) {
@@ -9,11 +11,11 @@ module.exports = function (executorNumber, diedBefore, firstRecord) {
     if (firstRecord) {
         I.amOnLoadedPage(pageUnderTest.getUrl());
     } else {
-        I.amOnLoadedPage(pageUnderTest.getUrl(parseInt(executorNumber) - 1));
+        I.amOnLoadedPage(pageUnderTest.getUrl(executorNumber));
     }
 
-    const answer = diedBefore ? 'Yes' : 'No';
-    I.click(`#diedbefore-option${answer}`);
+    const answer = convertToRadioLocator(diedBefore);
+    I.click(`#diedbefore${answer}`);
 
-    I.navByClick(commonContent.saveAndContinue);
+    I.navByClick(commonLocators.govUkButton);
 };

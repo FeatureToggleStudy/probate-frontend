@@ -1,6 +1,6 @@
 'use strict';
 
-const commonContent = require('app/resources/en/translation/common');
+const commonLocators = require('test/end-to-end/resources/common');
 const pageUnderTest = require('app/steps/ui/executors/currentname');
 
 module.exports = function (executorNumber, firstRecord) {
@@ -9,10 +9,10 @@ module.exports = function (executorNumber, firstRecord) {
     if (firstRecord) {
         I.amOnLoadedPage(pageUnderTest.getUrl());
     } else {
-        I.amOnLoadedPage(pageUnderTest.getUrl(parseInt(executorNumber) - 1));
+        I.amOnLoadedPage(pageUnderTest.getUrl(executorNumber));
     }
 
     I.fillField('#currentName', `Executor${executorNumber} Current Name`);
 
-    I.navByClick(commonContent.saveAndContinue);
+    I.navByClick(commonLocators.govUkButton);
 };

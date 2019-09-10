@@ -1,13 +1,13 @@
 'use strict';
 
-const commonContent = require('app/resources/en/translation/common');
+const commonLocators = require('test/end-to-end/resources/common');
 const pageUnderTest = require('app/steps/ui/executors/alias');
 
 module.exports = function (answer) {
     const I = this;
 
     I.amOnLoadedPage(pageUnderTest.getUrl());
-    I.click(`#alias-option${answer}`);
+    I.click(`#alias${answer}`);
 
-    I.navByClick(commonContent.saveAndContinue);
+    I.navByClick(commonLocators.govUkButton);
 };

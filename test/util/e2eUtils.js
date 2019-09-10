@@ -5,12 +5,20 @@ function convertToRadioLocator(option) {
 }
 
 function convertToCheckboxLocator(options) {
-    options.map((option) => {
-        return option === '1' ? '' : '-'+option;
+    return options.map((option) => {
+        return option === 1 ? '' : '-'+option;
     });
+}
+
+function convertExecAliasToCheckboxLocator(execsApplying, execsWithAliases) {
+    const indexes = execsApplying
+        .filter(x => execsWithAliases.includes(x))
+        .map(x => execsApplying.indexOf(x)+1);
+    return convertToCheckboxLocator(indexes);
 }
 
 module.exports = {
     convertToRadioLocator,
-    convertToCheckboxLocator
-}
+    convertToCheckboxLocator,
+    convertExecAliasToCheckboxLocator
+};

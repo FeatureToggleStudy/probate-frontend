@@ -1,6 +1,6 @@
 'use strict';
 
-const commonContent = require('app/resources/en/translation/common');
+const commonLocators = require('test/end-to-end/resources/common');
 const pageUnderTest = require('app/steps/ui/executors/whodied');
 const {forEach} = require('lodash');
 
@@ -11,5 +11,5 @@ module.exports = function (whoDiedLocators) {
     forEach(whoDiedLocators, whoDiedLocator => {
         I.checkOption('#executorsWhoDied' + whoDiedLocator);
     });
-    I.navByClick(commonContent.saveAndContinue);
+    I.navByClick(commonLocators.govUkButton);
 };

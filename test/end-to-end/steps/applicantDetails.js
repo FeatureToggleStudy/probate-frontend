@@ -3,7 +3,7 @@
 const e2eUtils = require('../../util/e2eUtils.js');
 const convertToRadioLocator = e2eUtils.convertToRadioLocator;
 
-module.exports = function (alias, numberOfExecutors) {
+module.exports = function (alias, numberOfExecutors=1) {
     const I = this;
 
     I.selectATask();

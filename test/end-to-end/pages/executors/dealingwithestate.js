@@ -1,17 +1,17 @@
 'use strict';
 
-const commonContent = require('app/resources/en/translation/common');
+const commonLocators = require('test/end-to-end/resources/common');
 const pageUnderTest = require('app/steps/ui/executors/dealingwithestate');
 const {forEach} = require('lodash');
 
-module.exports = function (executorsApplyingList) {
+module.exports = function (executorsApplying) {
     const I = this;
 
     I.amOnLoadedPage(pageUnderTest.getUrl());
 
-    forEach(executorsApplyingList, executorNumber => {
-        I.checkOption('#executorsApplying-'+(parseInt(executorNumber) - 1));
+    forEach(executorsApplying, executorNumber => {
+        I.checkOption('#executorsApplying-' + executorNumber);
     });
 
-    I.navByClick(commonContent.saveAndContinue);
+    I.navByClick(commonLocators.govUkButton);
 };

@@ -18,12 +18,11 @@ Scenario(TestConfigurator.idamInUseText('Single applicant journey'), function (I
     const deceasedAlias = false;
     const codicils = false;
     const applicantAlias = false;
-    const noOfExecutors = '1';
     const assetsOverseas = false;
 
     I.startApplicationProbate(screenersToggle);
     I.completeDeceasedDetails(paper, deceasedAlias, codicils);
-    I.completeApplicantDetails(applicantAlias, noOfExecutors);
+    I.completeApplicantDetails(applicantAlias);
     I.completeLegalDeclaration();
     I.completeCopiesDetails(assetsOverseas);
     I.completePayment();
@@ -35,11 +34,13 @@ Scenario.only(TestConfigurator.idamInUseText('Main applicant journey with 6 exec
     const deceasedAlias = false;
     const codicils = false;
     const applicantAlias = false;
-    const noOfExecutors = '7';
-    const whoDied = ['1', '6'];
+    const noOfExecutors = 7;
+    const whoDied = [1, 6];
+    const execsApplying = [3, 5];
+    const execsWithAliases = [3];
 
     I.startApplicationProbate(screenersToggle);
     I.completeDeceasedDetails(paper, deceasedAlias, codicils);
     I.completeApplicantDetails(applicantAlias, noOfExecutors);
-    I.completeExecutorDetails(noOfExecutors, whoDied);
+    I.completeExecutorDetails(noOfExecutors, whoDied, execsApplying, execsWithAliases);
 });
