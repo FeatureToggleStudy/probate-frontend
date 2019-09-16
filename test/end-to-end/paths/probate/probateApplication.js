@@ -42,5 +42,7 @@ Scenario.only(TestConfigurator.idamInUseText('Main applicant journey with 6 exec
     I.startApplicationProbate(screenersToggle);
     I.completeDeceasedDetails(paper, deceasedAlias, codicils);
     I.completeApplicantDetails(applicantAlias, noOfExecutors);
-    I.completeExecutorDetails(noOfExecutors, whoDied, execsApplying, execsWithAliases);
+    I.completeExecutorAllAliveDetails(noOfExecutors, whoDied);
+    I.completeExecutorApplyingDetails(execsApplying, execsWithAliases);
+    I.completeExecutorDetails();
 });

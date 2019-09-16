@@ -5,7 +5,7 @@ const convertToRadioLocator = e2eUtils.convertToRadioLocator;
 const commonLocators = require('test/end-to-end/resources/common');
 const pageUnderTest = require('app/steps/ui/executors/whendied');
 
-module.exports = function (executorNumber, diedBefore, firstRecord) {
+module.exports = function (executorNumber, firstRecord) {
     const I = this;
 
     if (firstRecord) {
@@ -14,7 +14,7 @@ module.exports = function (executorNumber, diedBefore, firstRecord) {
         I.amOnLoadedPage(pageUnderTest.getUrl(executorNumber));
     }
 
-    const answer = convertToRadioLocator(diedBefore);
+    const answer = convertToRadioLocator(firstRecord);
     I.click(`#diedbefore${answer}`);
 
     I.navByClick(commonLocators.govUkButton);
