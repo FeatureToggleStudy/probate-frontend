@@ -44,5 +44,5 @@ Scenario.only(TestConfigurator.idamInUseText('Main applicant journey with 6 exec
     I.completeApplicantDetails(applicantAlias, noOfExecutors);
     I.completeExecutorAllAliveDetails(noOfExecutors, whoDied);
     I.completeExecutorApplyingDetails(execsApplying, execsWithAliases);
-    I.completeExecutorDetails();
+    I.completeExecutorNotApplyingDetails(noOfExecutors, whoDied, execsApplying);
 });

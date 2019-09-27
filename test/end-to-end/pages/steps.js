@@ -126,7 +126,7 @@ module.exports = function () {
         completeApplicantDetails: steps.applicantDetails,
         completeExecutorAllAliveDetails: steps.executorAllAliveDetails,
         completeExecutorApplyingDetails: steps.executorApplyingDetails,
-        completeExecutorDetails: steps.executorDetails,
+        completeExecutorNotApplyingDetails: steps.executorNotApplyingDetails,
         completeLegalDeclaration: steps.legalDeclaration,
         completeCopiesDetails: steps.copies,
         completePayment: steps.payment
