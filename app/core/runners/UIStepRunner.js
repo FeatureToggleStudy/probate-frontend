@@ -69,6 +69,7 @@ class UIStepRunner {
                 if (hasDataChanged) {
                     delete formdata.declaration.declarationCheckbox;
                     formdata.declaration.hasDataChanged = true;
+                    formdata.forceRedeclaration = true;
                 }
 
                 if ((get(formdata, 'ccdCase.state') === 'Pending' || get(formdata, 'ccdCase.state') === 'CasePaymentFailed') && session.regId && step.shouldPersistFormData()) {

@@ -229,7 +229,7 @@ class Declaration extends ValidationStep {
         delete ctx.ihtNetValueAssetsOutside;
         delete ctx.hasMultipleApplicants;
 
-        if (ctx.hasDataChanged === true) {
+        if (formdata.forceRedeclaration === true) {
             this.resetAgreedFlags(ctx);
         }
 
@@ -249,6 +249,16 @@ class Declaration extends ValidationStep {
         res.req.session.form.legalDeclaration = legalDocumentJSONObjBuilder.build(formdata, html);
         res.send(html);
     }
+
+    isComplete(ctx, formdata) {
+        if (formdata.forceRedeclaration) {
+            formdata.forceRedeclaration = false;
+            return [false, 'noProgress'];
+        } else {
+            return super.isComplete(ctx, formdata)
+        }
+    }
+
 }
 
 module.exports = Declaration;
