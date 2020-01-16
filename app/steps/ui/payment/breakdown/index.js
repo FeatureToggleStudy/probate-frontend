@@ -22,6 +22,8 @@ class PaymentBreakdown extends Step {
         ctx.copies = this.createCopiesLayout(formdata);
         ctx.applicationFee = fees.applicationfee;
         ctx.total = Number.isInteger(fees.total) ? fees.total : parseFloat(fees.total).toFixed(2);
+        ctx = this.formatAmounts(ctx);
+
         return [ctx, ctx.errors];
     }
 
@@ -38,6 +40,14 @@ class PaymentBreakdown extends Step {
             uk: {number: ukCopies, cost: formdata.fees.ukcopiesfee},
             overseas: {number: overseasCopies, cost: formdata.fees.overseascopiesfee},
         };
+    }
+
+    formatAmounts(ctx) {
+        ctx.applicationFee = ctx.applicationFee.toFixed(2);
+        ctx.total = parseFloat(ctx.total).toFixed(2);
+        ctx.copies.uk.cost = ctx.copies.uk.cost.toFixed(2);
+        ctx.copies.overseas.cost = ctx.copies.overseas.cost.toFixed(2);
+        return ctx;
     }
 
     getContextData(req) {
@@ -137,6 +147,7 @@ class PaymentBreakdown extends Step {
             } else {
                 delete this.nextStepUrl;
             }
+            ctx = this.formatAmounts(ctx);
             return [ctx, errors];
         } finally {
             this.unlockPayment(session);
