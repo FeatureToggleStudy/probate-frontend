@@ -340,18 +340,18 @@ describe('PaymentBreakdown', () => {
                 expect(errors).to.deep.equal(errorsTestData);
                 expect(ctx).to.deep.equal({
                     caseType: 'gop',
-                    applicationFee: 215,
+                    applicationFee: '215.00',
                     copies: {
                         uk: {
-                            cost: 1.5,
+                            cost: '1.50',
                             number: 1
                         },
                         overseas: {
-                            cost: 3,
+                            cost: '3.00',
                             number: 2
                         }
                     },
-                    total: 219.50
+                    total: '219.50'
                 });
                 postStub.restore();
                 done();

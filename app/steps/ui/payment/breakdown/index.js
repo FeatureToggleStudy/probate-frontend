@@ -73,6 +73,7 @@ class PaymentBreakdown extends Step {
             ctx.total = originalFees.total;
             ctx.applicationFee = originalFees.applicationfee;
             ctx.copies = this.createCopiesLayout(formdata);
+            ctx = this.formatAmounts(ctx);
 
             const authorise = new Authorise(config.services.idam.s2s_url, ctx.sessionID);
             const serviceAuthResult = yield authorise.post();
@@ -142,12 +143,10 @@ class PaymentBreakdown extends Step {
                 }
                 ctx.reference = paymentResponse.reference;
                 ctx.paymentCreatedDate = paymentResponse.date_created;
-
                 this.nextStepUrl = () => paymentResponse._links.next_url.href;
             } else {
                 delete this.nextStepUrl;
             }
-            ctx = this.formatAmounts(ctx);
             return [ctx, errors];
         } finally {
             this.unlockPayment(session);
