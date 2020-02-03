@@ -89,12 +89,13 @@ const renderDashboard = (req, result, next) => {
     next();
 };
 
-const getCase = (req, res, next) => {
+const getCase = (req, res, next, checkDeclarationStatuses) => {
     const session = req.session;
+    const redirectingFromDashboard = req.originalUrl !== '/task-list';
     let ccdCaseId;
     let probateType;
 
-    if (req.originalUrl !== '/task-list') {
+    if (redirectingFromDashboard) {
         ccdCaseId = req.originalUrl.split('/')[2];
         if (ccdCaseId) {
             ccdCaseId = ccdCaseId.split('?')[0];
@@ -124,11 +125,13 @@ const getCase = (req, res, next) => {
 
         formData.get(req.authToken, req.session.serviceAuthorization, ccdCaseId, probateType)
             .then(result => {
-                if (req.originalUrl !== '/task-list') {
+                if (redirectingFromDashboard) {
                     session.form = result;
                     res.redirect('/task-list');
                 } else {
-                    session.form = getDeclarationStatuses(result, session.form);
+                    if (checkDeclarationStatuses) {
+                        session.form = getDeclarationStatuses(result, session.form);
+                    }
                     next();
                 }
             })
