@@ -128,7 +128,7 @@ const getCase = (req, res, next) => {
                     session.form = result;
                     res.redirect('/task-list');
                 } else {
-                    session.form = getDeclarationStatuses(session.form, result);
+                    session.form = getDeclarationStatuses(result, session.form);
                     next();
                 }
             })
@@ -142,24 +142,25 @@ const getCase = (req, res, next) => {
 };
 
 const getDeclarationStatuses = (result, formdata) => {
-    const executors = result.executors;
-    const executorsWrapper = new ExecutorsWrapper(executors);
-    const hasMultipleApplicants = executorsWrapper.hasMultipleApplicants();
 
-    if ((get(result, 'declaration.declarationCheckbox', false)).toString() === 'true' && hasMultipleApplicants) {
-        formdata.executors = executors;
-        formdata.executorsDeclarations = [];
-
-        formdata.executorsDeclarations = executors.list
-            .filter(executor => !executor.isApplicant)
-            .map(executor => {
-                const agreed = executor.executorAgreed === 'Yes';
-                return {
+    formdata.executorsDeclarations = [];
+    result.executors.list
+        .forEach((executor, index) => {
+            if (!executor.isApplicant) {
+                const executorAgreed = get(executor, 'executorAgreed');
+                let agreed;
+                if (typeof executorAgreed === 'undefined') {
+                    agreed = 'notDeclared';
+                } else {
+                    formdata.executors.list[index].executorAgreed = executorAgreed;
+                    agreed = executorAgreed === 'Yes' ? 'agreed' : 'disagreed';
+                }
+                formdata.executorsDeclarations.push({
                     executorName: executor.fullName,
                     agreed: agreed
-                };
-            });
-    }
+                });
+            }
+        });
     return formdata;
 };
 
