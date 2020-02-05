@@ -58,7 +58,7 @@ const allApplicationsExpectedResponse = {
 };
 
 describe('multipleApplicationsMiddleware', () => {
-    describe('initDashboardMiddleware', () => {
+    describe('InitDashboardMiddleware', () => {
         it('should redirect to Start Eligibility if no applications found', (done) => {
             const req = {
                 session: {

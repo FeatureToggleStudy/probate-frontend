@@ -5,6 +5,7 @@ const config = require('app/config');
 const logger = require('app/components/logger')('Init');
 const ServiceMapper = require('app/utils/ServiceMapper');
 const caseTypes = require('app/utils/CaseTypes');
+const ExecutorsWrapper = require('app/wrappers/Executors');
 const contentWillLeft = require('app/resources/en/translation/screeners/willleft');
 
 const initDashboard = (req, res, next) => {
@@ -130,7 +131,7 @@ const getCase = (req, res, next, checkDeclarationStatuses) => {
                     res.redirect('/task-list');
                 } else {
                     if (checkDeclarationStatuses) {
-                        session.form = getDeclarationStatuses(result, session.form);
+                        session.form = populateDeclarationFlags(result, session.form);
                     }
                     next();
                 }
@@ -144,7 +145,19 @@ const getCase = (req, res, next, checkDeclarationStatuses) => {
     }
 };
 
-const getDeclarationStatuses = (result, formdata) => {
+const getDeclarationStatuses = (req, res, next) => {
+    const formdata = req.session.form;
+    const executorsWrapper = new ExecutorsWrapper(formdata.executors);
+    const hasMultipleApplicants = executorsWrapper.hasMultipleApplicants();
+
+    if ((get(formdata, 'declaration.declarationCheckbox', false)).toString() === 'true' && hasMultipleApplicants) {
+        getCase(req, res, next, true);
+    } else {
+        next();
+    }
+};
+
+const populateDeclarationFlags = (result, formdata) => {
     formdata.executorsDeclarations = [];
 
     result.executors.list
