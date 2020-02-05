@@ -728,7 +728,7 @@ describe('multipleApplicationsMiddleware', () => {
                         }
                     ]
                 }
-            }
+            };
 
             const next = sinon.spy();
             const serviceStub = sinon.stub(Service.prototype, 'fetchJson')
