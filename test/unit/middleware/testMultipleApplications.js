@@ -662,16 +662,15 @@ describe('multipleApplicationsMiddleware', () => {
         });
     });
 
-    describe('GetDeclarationStatuses', () => {
+    describe.only('GetDeclarationStatuses', () => {
         it('should return a list of coapplicants and their declaration statuses', (done) => {
             const req = {
                 originalUrl: '/task-list',
                 session: {
                     form: {
-                        applicantEmail: 'test@email.com',
+                        caseType: 'gop',
                         ccdCase: {
-                            id: 1234567890123456,
-                            state: 'Pending'
+                            id: 1234567890123456
                         },
                         declaration: {
                             declarationCheckbox: 'true',
@@ -698,12 +697,12 @@ describe('multipleApplicationsMiddleware', () => {
                     }
                 }
             };
+            const res = {};
 
-            const updatedFormdata = {
-                applicantEmail: 'test@email.com',
+            const getCaseStubResponse = {
+                caseType: 'gop',
                 ccdCase: {
-                    id: 1234567890123456,
-                    state: 'Pending'
+                    id: 1234567890123456
                 },
                 declaration: {
                     declarationCheckbox: 'true',
@@ -729,16 +728,21 @@ describe('multipleApplicationsMiddleware', () => {
                         }
                     ]
                 }
-            };
+            }
 
-            multipleApplicationsMiddleware.getDeclarationStatuses(updatedFormdata, req.session.form);
+            const next = sinon.spy();
+            const serviceStub = sinon.stub(Service.prototype, 'fetchJson')
+                .returns(Promise.resolve(getCaseStubResponse));
+
+            multipleApplicationsMiddleware.getDeclarationStatuses(req, res, next);
 
             setTimeout(() => {
+                expect(serviceStub.calledOnce).to.equal(true);
+                expect(next.calledOnce).to.equal(true);
                 expect(req.session.form).to.deep.equal({
-                    applicantEmail: 'test@email.com',
+                    caseType: 'gop',
                     ccdCase: {
-                        id: 1234567890123456,
-                        state: 'Pending'
+                        id: 1234567890123456
                     },
                     declaration: {
                         declarationCheckbox: 'true',
@@ -779,6 +783,7 @@ describe('multipleApplicationsMiddleware', () => {
                         }
                     ]
                 });
+                serviceStub.restore();
                 done();
             });
         });
