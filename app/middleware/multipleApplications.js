@@ -5,7 +5,7 @@ const config = require('app/config');
 const logger = require('app/components/logger')('Init');
 const ServiceMapper = require('app/utils/ServiceMapper');
 const caseTypes = require('app/utils/CaseTypes');
-const ExecutorsWrapper = require('app/wrappers/Executors');
+const contentWillLeft = require('app/resources/en/translation/screeners/willleft');
 
 const initDashboard = (req, res, next) => {
     const session = req.session;
@@ -145,8 +145,8 @@ const getCase = (req, res, next, checkDeclarationStatuses) => {
 };
 
 const getDeclarationStatuses = (result, formdata) => {
-
     formdata.executorsDeclarations = [];
+
     result.executors.list
         .forEach((executor, index) => {
             if (!executor.isApplicant) {
@@ -164,6 +164,7 @@ const getDeclarationStatuses = (result, formdata) => {
                 });
             }
         });
+
     return formdata;
 };
 
