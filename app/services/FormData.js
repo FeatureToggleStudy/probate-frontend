@@ -60,19 +60,6 @@ class FormData extends Service {
         const fetchOptions = this.fetchOptions({}, 'POST', headers);
         return this.fetchJson(url, fetchOptions);
     }
-
-    getDeclarationStatuses(authToken, serviceAuthorisation, ccdCaseId) {
-        const path = this.replacePlaceholderInPath(this.config.services.orchestrator.paths.declarationStatuses, 'ccdCaseId', ccdCaseId);
-        const url = this.endpoint + path + '?probateType=PA';
-        this.log('Get declaration statuses');
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': authToken,
-            'ServiceAuthorization': serviceAuthorisation
-        };
-        const fetchOptions = this.fetchOptions({}, 'GET', headers);
-        return this.fetchJson(url, fetchOptions);
-    }
 }
 
 module.exports = FormData;
