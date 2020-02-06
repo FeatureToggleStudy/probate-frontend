@@ -660,10 +660,8 @@ describe('multipleApplicationsMiddleware', () => {
                 done();
             });
         });
-    });
 
-    describe('GetDeclarationStatuses', () => {
-        it('should call getCase and set the executor declaration flags in the session.form', (done) => {
+        it('should set the executor declaration flags in the session.form', (done) => {
             const req = {
                 originalUrl: '/task-list',
                 session: {
@@ -699,7 +697,7 @@ describe('multipleApplicationsMiddleware', () => {
             };
             const res = {};
 
-            const getCaseStubResponse = {
+            const multipleAppGetCaseStubResponse = {
                 caseType: 'gop',
                 ccdCase: {
                     id: 1234567890123456
@@ -732,9 +730,9 @@ describe('multipleApplicationsMiddleware', () => {
 
             const next = sinon.spy();
             const serviceStub = sinon.stub(Service.prototype, 'fetchJson')
-                .returns(Promise.resolve(getCaseStubResponse));
+                .returns(Promise.resolve(multipleAppGetCaseStubResponse));
 
-            multipleApplicationsMiddleware.getDeclarationStatuses(req, res, next);
+            multipleApplicationsMiddleware.getCase(req, res, next, true);
 
             setTimeout(() => {
                 expect(serviceStub.calledOnce).to.equal(true);
