@@ -662,8 +662,8 @@ describe('multipleApplicationsMiddleware', () => {
         });
     });
 
-    describe.only('GetDeclarationStatuses', () => {
-        it('should return a list of coapplicants and their declaration statuses', (done) => {
+    describe('GetDeclarationStatuses', () => {
+        it('should call getCase and set the executor declaration flags in the session.form', (done) => {
             const req = {
                 originalUrl: '/task-list',
                 session: {
